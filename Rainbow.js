@@ -34,20 +34,23 @@
 			return this;
 		},
 
-		draw: function(position){
+		draw: function(instructions){
 			var command, color, brush, size;
 
 			if( !this.isActive ) return this;
 
-			color = _getColor(this);
-			brush = _getBrush(this);
+			color = instructions.color || _getColor(this);
+			brush = instructions.brush || _getBrush(this);
 
 			command = {
-				x: position.x,
-				y: position.y,
+				x: instructions.x,
+				y: instructions.y,
 				color: color,
 				brush: brush
 			};
+
+			this.brush = brush;
+			this.color = color;
 
 			_draw(this, command);
 			return this;
@@ -107,12 +110,12 @@
 		var frequencyR 	= options.frequencyR || .1,
 			frequencyG	= options.frequencyG || .1,
 			frequencyB	= options.frequencyB || .1,
-			phaseR		= options.phaseR || 0,
-			phaseG		= options.phaseG || 2,
-			phaseB		= options.phaseB || 4,
+			phaseR		= options.phaseR || .1,
+			phaseG		= options.phaseG || .1,
+			phaseB		= options.phaseB || .1,
 			alpha		= options.alpha || .2,
 			center		= options.center || 128,
-			width		= options.width || 127,
+			width		= options.width || /*127*/100,
 			len			= options.len || 50,
 			rainbow 	= [],
 
@@ -137,14 +140,14 @@
 	function _makeBrushGradient( options ){
 
 		var i = 0,
-			frequencyR			= options.radialWave || .5,
+			frequencyR			= options.radialWave || .4,
 			frequencyP			= options.pressureWave || .3,
-			len					= options.len || 5,
+			len					= options.len || 4,
 			spin				= options.spin || 20/360,
-			points				= options.points || 8,
+			points				= options.points || 6,
 			layers 				= options.layers || 3,
 			radiusAmplitude		= options.maxSize || 8,
-			radiusCenter		= options.minSize || 5,
+			radiusCenter		= options.minSize || 4,
 			pressureAmplitude	= options.maxPressure || 5,
 			pressureCenter		= options.minPressure || 2,
 			brush 				= [],
@@ -173,6 +176,9 @@
 	function _draw( inst, command ){
 
 		// adapted from: http://www.pixelwit.com/blog/2007/06/basic-circle-drawing-actionscript/
+
+		if (!command.brush) return;
+		if (!command.color) return;
 
 		var context 			= inst.canvas.getContext('2d'),
 			centerX 			= command.x,
