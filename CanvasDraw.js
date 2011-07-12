@@ -1,35 +1,25 @@
 (function(){
 
-	window.Rainbow = function( options ){
+	var id = 1;
 
+	window.CanvasDraw = function( options ){
+		this.id = id++;
 		this.canvas = options.canvas;
-		this.colourOptions = options.colourOptions || {};
-		this.brushOptions = options.brushOptions || {};
-
-		this.colors = _makeColorGradient(this.colourOptions);
-		this.colorsLength = this.colors.length;
-
-		this.brushes = _makeBrushGradient(this.brushOptions);
-		this.brushLength = this.brushes.length;
+		this.updateColor(options);
+		this.updateBrush(options);
+		this.isActive = false;
 	};
 
 	// public methods
-	window.Rainbow.prototype = {
+	window.CanvasDraw.prototype = {
 
-		isActive: false,
-		points: [],
-		colorCyclePos: 0,
-		brushCyclePos: 0,
-		brushReverse: false,
-		colorReverse: false,
-
-		begin: function(){
+		begin: function(options){
 			this.isActive = true;
 			return this;
 		},
 
 		complete: function(){
-			this.isActive =  false;
+			this.isActive = false;
 			this.points = [];
 			return this;
 		},
@@ -39,7 +29,8 @@
 
 			if( !this.isActive ) return this;
 
-			color = instructions.color || _getColor(this);
+			this.color = color = instructions.color || _getColor(this);
+
 			brush = instructions.brush || _getBrush(this);
 
 			command = {
@@ -50,10 +41,42 @@
 			};
 
 			this.brush = brush;
-			this.color = color;
 
 			_draw(this, command);
 			return this;
+		},
+
+		updateColor: function(options){
+			this.colorOptions = options.color || {};
+			if( typeof this.colorOptions === 'string'){
+				this.color = this.colorOptions;
+				this.colors = null;
+			} else {
+				this.colors = _makeColorGradient(this.colorOptions);
+				this.colorsLength = this.colors.length;
+			}
+
+			this.colorCyclePos = 0;
+			this.colorReverse = false;
+		},
+
+		updateBrush: function(options){
+			var i;
+			this.brushOptions = options.brush || {};
+
+			for (i in this.brushOptions){
+				if(this.brushOptions.hasOwnProperty(i)){
+					this.brushOptions[i] = options.brush[i] || this.brushOptions[i];
+				}
+			}
+
+			this.brushes = _makeBrushGradient(this.brushOptions);
+			this.brushLength = this.brushes.length;
+
+			this.points = [];
+
+			this.brushCyclePos = 0;
+			this.brushReverse = false;
 		}
 	};
 
@@ -61,6 +84,11 @@
 
 	function _getColor( inst ){
 		var i;
+
+		if(!inst.colors){
+			return inst.color;
+		}
+
 		if( inst.colorReverse ){
 			if (inst.colorCyclePos === 0 ){
 				i = 1;
@@ -92,7 +120,7 @@
 				inst.brushReverse = true;
 			}
 		} else {
-			if(inst.brushCyclePos ===  inst.brushLength){
+			if(inst.brushCyclePos === inst.brushLength){
 				i = -1;
 				inst.brushReverse = true;
 			} else{
@@ -113,8 +141,8 @@
 			phaseR		= options.phaseR || .1,
 			phaseG		= options.phaseG || .1,
 			phaseB		= options.phaseB || .1,
-			alpha		= options.alpha || .2,
-			center		= options.center || 128,
+			alpha		= options.alpha || .3,
+			center		= options.center || 200,
 			width		= options.width || /*127*/100,
 			len			= options.len || 50,
 			rainbow 	= [],
@@ -140,15 +168,15 @@
 	function _makeBrushGradient( options ){
 
 		var i = 0,
-			frequencyR			= options.radialWave || .4,
-			frequencyP			= options.pressureWave || .3,
+			frequencyR			= options.radialWave || .1,
+			frequencyP			= options.pressureWave || .2,
 			len					= options.len || 4,
 			spin				= options.spin || 20/360,
-			points				= options.points || 6,
-			layers 				= options.layers || 3,
-			radiusAmplitude		= options.maxSize || 8,
-			radiusCenter		= options.minSize || 4,
-			pressureAmplitude	= options.maxPressure || 5,
+			points				= options.points || 7,
+			layers 				= options.layers || 4,
+			radiusAmplitude		= options.maxSize || 10,
+			radiusCenter		= options.minSize || 6,
+			pressureAmplitude	= options.maxPressure || 4,
 			pressureCenter		= options.minPressure || 2,
 			brush 				= [],
 
@@ -189,7 +217,9 @@
 			incrementRadiusBy 	= Math.round(radius/layers);
 
 		context.lineWidth = command.brush.lineWidth;
-		context.strokeStyle = "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+command.color.a+")";
+		context.strokeStyle = typeof command.color === 'string'
+								? command.color
+								: "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+command.color.a+")";
 
 		radius += incrementRadiusBy;
 
@@ -263,4 +293,4 @@
 		}
 	};
 
-})();
+}());

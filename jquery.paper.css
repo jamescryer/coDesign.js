@@ -1,0 +1,37 @@
+
+#paper-controls{
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding:3px;
+    position:absolute;
+    top:16px;
+    left:5px;
+    float:left;
+    }
+    #paper-controls .option-group{
+        float:left;
+        margin-right: 15px;
+        }
+    #paper-controls .option-group.last{
+        margin-right: 0px;
+        }
+    #paper-controls .button {
+        border-radius: 5px;
+        border: 1px solid #ddd;
+        float:left;
+        margin-right:3px;
+        padding:2px;
+        width: 14px;
+        height: 14px;
+        background-repeat: no-repeat;
+        background-position: 1px 1px;
+        cursor: pointer;
+        }
+    #paper-controls .button.active {
+        border-color: #888;
+        }
+    #paper-controls .button:hover {
+        border-color: #aaa;
+        }
+    
+
