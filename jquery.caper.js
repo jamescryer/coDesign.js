@@ -12,7 +12,7 @@
             onWrite: function(){}
         };
 
-    $.fn.paper = function(opts, args){
+    $.fn.caper = function(opts, args){
 
         this.each(function(){
             
