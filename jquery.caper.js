@@ -124,7 +124,7 @@
                     
                     $controls.find('.miniColors').miniColors({
                         change: function(hex, rgb) {
-                            $this.paper('color',hex); // this stinks - will fix later
+                            $this.caper('color',hex); // this stinks - will fix later
                         }
                     });
 
@@ -142,7 +142,7 @@
                     
                     if(this.id === 'fgColor') return;
                     
-                    $this.paper('color', options.colors[this.id] ); // this stinks - will fix later
+                    $this.caper('color', options.colors[this.id] ); // this stinks - will fix later
                 },
                 
                 brushSelect: function( event ){
@@ -152,7 +152,7 @@
                     $me.siblings('.button').removeClass('active'); // super inefficient but im feeling lazy - fix later
                     $me.addClass('active');
                                         
-                    $this.paper('brush', options.brushes[this.id] ); // this stinks - will fix later
+                    $this.caper('brush', options.brushes[this.id] ); // this stinks - will fix later
                 },
 
                 mouseUp: function( event ){
