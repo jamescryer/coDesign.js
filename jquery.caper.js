@@ -34,7 +34,6 @@
             canvas      = $('<canvas width="'+width+'" height="'+height+'" />').prependTo($this);
             position    = $this.offset();
 
-
             _private = {
                 
                 init: function(){
@@ -43,18 +42,19 @@
                         canvas: canvas.get(0),
                         color  : options.color,
                         size  : options.brushSize,
-                        brush : {}
+                        brush : $.extend({},options.brushes.default) || {} // use extend to create copy / dont use object reference
                     });
         
                     textRenderer = new CanvasWrite({
                         canvas:canvas.get(0)
                     });
         
-                    textarea = $('<textarea style="position:absolute; left: -10px; height:0; width: 0;"/>').appendTo(document.body);
+                    textarea = $('<textarea style="position: absolute; left: -10px; top: -10px; height:0px; width: 0px;"></textarea>')
+                        .prependTo(document.body);
         
                     textarea
                         .bind('keyup', _private.textareaKeyUp );
-                        
+                    
                     _private.enableControls();
                 },
                 
@@ -96,6 +96,12 @@
                     });
                     controls += '</div>';
                     
+                    controls += ''
+                            + '<div class="option-group">'
+                            +   '<span class="button" id="erase" style="background-image: url()">'
+                            +   '</span>'
+                            + '</div>';
+                    
                     controls += '<div class="colors last option-group">';
                     controls += ''
                         + '<span class="button active">'
@@ -105,10 +111,21 @@
                     $.each(options.colors, function(name){
                         controls +=  '<span class="button" id="'+name+'" style="background-image: url('+this.image+')"></span>';
                     });
-                    controls += '</div>';
+                    
+                    controls += ''
+                            + '<div class="option-group">'
+                            +   '<select id="size">'
+                            +       '<option value="2">2</option>'
+                            +       '<option value="4">4</option>'
+                            +       '<option value="8">8</option>'
+                            +       '<option value="16">16</option>'
+                            +       '<option value="24">24</option>'
+                            +       '<option value="32">32</option>'
+                            +   '</select>'
+                            + '</div>';                    
                     
                     controls = ''
-                        + '<div id="paper-controls">'
+                        + '<div id="caper-controls">'
                         + controls
                         + '</div>';
     
@@ -131,6 +148,16 @@
                     $controls.find('.colors .button').click( _private.colorSelect );
                     $controls.find('.brushes .button').click( _private.brushSelect );
                     
+                    $controls.find('#erase').click( _private.erase );
+                    
+                    $controls
+                        .find('#size')
+                        .bind('mouseup mousedown', function(){return false;} )
+                        .change(function(){
+                            var value = this.value;
+                            rainbow.size = value;
+                            rainbow.updateBrush({});
+                        });
                 },
                 
                 colorSelect: function( event ){
@@ -151,10 +178,18 @@
                     
                     $me.siblings('.button').removeClass('active'); // super inefficient but im feeling lazy - fix later
                     $me.addClass('active');
-                                        
+                    
+                    console.log(options.brushes[this.id]);
+                    
                     $this.caper('brush', options.brushes[this.id] ); // this stinks - will fix later
                 },
-
+                
+                erase: function(){
+                    var $me = $(this);
+                    $me.toggleClass('active');
+                    rainbow.setErase( $me.hasClass('active') );
+                },
+                
                 mouseUp: function( event ){
                     
                     var top = event.clientY - position.top - document.body.scrollTop,
@@ -257,7 +292,6 @@
                                 brush: event.brush
                             });
                     }
-                    
                 },
                 
                 write: function( config ){

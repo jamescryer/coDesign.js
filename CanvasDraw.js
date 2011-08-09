@@ -5,9 +5,11 @@
 	window.CanvasDraw = function( options ){
 		this.id = id++;
 		this.canvas = options.canvas;
+		this.size = options.size;
 		this.updateColor(options);
 		this.updateBrush(options);
 		this.isActive = false;
+		this.erase = false;
 	};
 
 	// public methods
@@ -29,8 +31,12 @@
 
 			if( !this.isActive ) return this;
 
-			this.color = color = instructions.color || _getColor(this);
+			if (this.erase) {
+				this.canvas.getContext('2d').clearRect ( instructions.x-(this.size/2), instructions.y-(this.size/2), this.size, this.size );
+				return this;
+			}
 
+			this.color = color = instructions.color || _getColor(this);
 			brush = instructions.brush || _getBrush(this);
 
 			command = {
@@ -62,21 +68,29 @@
 
 		updateBrush: function(options){
 			var i;
-			this.brushOptions = options.brush || {};
-
-			for (i in this.brushOptions){
-				if(this.brushOptions.hasOwnProperty(i)){
-					this.brushOptions[i] = options.brush[i] || this.brushOptions[i];
+			
+			if( !this.brushOptions ){
+				this.brushOptions = options.brush || {};
+			} else {
+				options = options.brush || {};
+				for (i in options){
+					if(options.hasOwnProperty(i)){
+						this.brushOptions[i] = options[i] || this.brushOptions[i];
+					}
 				}
 			}
 
-			this.brushes = _makeBrushGradient(this.brushOptions);
+			this.brushes = _makeBrushGradient(this.brushOptions, this.size);
 			this.brushLength = this.brushes.length;
 
 			this.points = [];
 
 			this.brushCyclePos = 0;
 			this.brushReverse = false;
+		},
+		
+		setErase: function(bool){
+			this.erase = bool === void 0 ? true : bool;
 		}
 	};
 
@@ -144,7 +158,7 @@
 			alpha		= options.alpha || .3,
 			center		= options.center || 200,
 			width		= options.width || /*127*/100,
-			len			= options.len || 50,
+			len		= options.len || 50,
 			rainbow 	= [],
 
 			red, grn, blu;
@@ -165,20 +179,20 @@
 		return rainbow;
 	}
 
-	function _makeBrushGradient( options ){
+	function _makeBrushGradient( options, size){
 
 		var i = 0,
-			frequencyR			= options.radialWave || .1,
-			frequencyP			= options.pressureWave || .2,
-			len					= options.len || 4,
-			spin				= options.spin || 20/360,
-			points				= options.points || 7,
-			layers 				= options.layers || 4,
-			radiusAmplitude		= options.maxSize || 10,
-			radiusCenter		= options.minSize || 6,
+			frequencyR		= options.radialWave || .1,
+			frequencyP		= options.pressureWave || .2,
+			len			= options.len || 4,
+			spin			= options.spin || 20/360,
+			points			= options.points || 7,
+			layers 			= options.layers || 4,
+			radiusAmplitude		= size || 10,
+			radiusCenter		= Math.ceil(size*(options.minSizeRatio||.5)) || 6,
 			pressureAmplitude	= options.maxPressure || 4,
 			pressureCenter		= options.minPressure || 2,
-			brush 				= [],
+			brush 			= [],
 
 			layers, radius, pressure;
 
@@ -209,12 +223,12 @@
 		if (!command.color) return;
 
 		var context 			= inst.canvas.getContext('2d'),
-			centerX 			= command.x,
-			centerY 			= command.y,
-			radius 				= command.brush.size,
-			sides 				= command.brush.pointsPerLayer,
-			layers 				= command.brush.layers,
-			incrementRadiusBy 	= Math.round(radius/layers);
+			centerX 		= command.x,
+			centerY 		= command.y,
+			radius 			= command.brush.size,
+			sides 			= command.brush.pointsPerLayer,
+			layers 			= command.brush.layers,
+			incrementRadiusBy 	= Math.ceil(radius/layers);
 
 		context.lineWidth = command.brush.lineWidth;
 		context.strokeStyle = typeof command.color === 'string'
@@ -257,29 +271,30 @@
 
 			radius -= incrementRadiusBy;
 			layers--;
-		} while(radius>=incrementRadiusBy )
+			
+		} while(radius>=1 )
 
 	};
 
 	function _drawOval(options) {
 		var centerX 		= options.centerX,
-			centerY 		= options.centerY,
-			radiusX 		= options.radiusX,
-			radiusY 		= options.radiusY,
-			spin 			= options.spin,
-			steps 			= options.steps,
-			layers 			= options.layers,
-			drawMethod 		= options.drawMethod,
+			centerY 	= options.centerY,
+			radiusX 	= options.radiusX,
+			radiusY 	= options.radiusY,
+			spin 		= options.spin,
+			steps 		= options.steps,
+			layers 		= options.layers,
+			drawMethod 	= options.drawMethod,
 			i,
 			radian,
 			radianSin,
 			radianCos,
 			arrayOfPoints 	= [],
 			spinRadians 	= spin * 2 * Math.PI,
-			spinSin 		= Math.sin(spinRadians),
-			spinCos 		= Math.cos(spinRadians),
-			xx 				= centerX + spinCos * radiusX,
-			yy 				= centerY + spinSin * radiusX;
+			spinSin 	= Math.sin(spinRadians),
+			spinCos 	= Math.cos(spinRadians),
+			xx 		= centerX + spinCos * radiusX,
+			yy 		= centerY + spinSin * radiusX;
 
 		for (i=1; i<=steps; i++) {
 			radian = i/steps * 2 * Math.PI;

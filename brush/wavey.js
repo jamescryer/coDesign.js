@@ -8,5 +8,6 @@ window.brushes['wavey'] = {
     points : 5,
     layers : 5,
     maxPressure : 10,
-    minPressure : 1
+    minPressure : 1,
+    minSizeRatio: 0.5
 };

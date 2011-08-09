@@ -8,5 +8,6 @@ window.brushes['sketchy'] = {
     points : 6,
     layers : 3,
     maxPressure : 3,
-    minPressure : 1
+    minPressure : 1,
+    minSizeRatio: 0.5
 };

@@ -9,6 +9,5 @@ window.brushes['default'] = {
     layers : 5,
     maxPressure : 1,
     minPressure : 1,
-    maxSize: 3,
-    minSize: 3
+    minSizeRatio: 0.5
 };
