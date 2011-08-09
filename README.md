@@ -16,9 +16,9 @@ James Cryer / Huddle.com
 TODO:
 -----
 
-+ Eraser
++ -Eraser-
 + Fixed size
-+ Brush Size
++ -Brush Size-
 + Text styles
 + More brushes
 + More Colors
