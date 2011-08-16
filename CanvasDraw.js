@@ -10,6 +10,7 @@
 		this.updateBrush(options);
 		this.isActive = false;
 		this.erase = false;
+		this.points = [];
 	};
 
 	// public methods
@@ -82,8 +83,6 @@
 
 			this.brushes = _makeBrushGradient(this.brushOptions, this.size);
 			this.brushLength = this.brushes.length;
-
-			this.points = [];
 
 			this.brushCyclePos = 0;
 			this.brushReverse = false;
@@ -179,7 +178,7 @@
 		return rainbow;
 	}
 
-	function _makeBrushGradient( options, size){
+	function _makeBrushGradient( options, size){ // for waveyness
 
 		var i = 0,
 			frequencyR		= options.radialWave || .1,
@@ -188,7 +187,7 @@
 			spin			= options.spin || 20/360,
 			points			= options.points || 7,
 			layers 			= options.layers || 4,
-			radiusAmplitude		= size || 10,
+			radiusAmplitude		= size*(options.minSizeRatio||.5) || 10,
 			radiusCenter		= Math.ceil(size*(options.minSizeRatio||.5)) || 6,
 			pressureAmplitude	= options.maxPressure || 4,
 			pressureCenter		= options.minPressure || 2,
@@ -196,9 +195,8 @@
 
 			layers, radius, pressure;
 
-		for (; i < len; ++i)
-		{
-			radius = Math.sin(frequencyR*i) * radiusAmplitude + radiusCenter;
+		for (; i < len; ++i){
+			radius = Math.ceil(Math.sin(frequencyR*i) * radiusAmplitude + radiusCenter);
 			pressure = Math.sin(frequencyP*i) * pressureAmplitude + pressureCenter;
 
 			brush.push({
@@ -207,8 +205,8 @@
 				lineWidth: pressure,
 				size: radius,
 				spin: spin,
-				width: options.width || radius,
-				height: options.height || radius
+				widthRatio: options.widthRatio || 1,
+				heightRatio: options.heightRatio || 1
 			});
 		}
 
@@ -227,22 +225,21 @@
 			centerY 		= command.y,
 			radius 			= command.brush.size,
 			sides 			= command.brush.pointsPerLayer,
-			layers 			= command.brush.layers,
-			incrementRadiusBy 	= Math.ceil(radius/layers);
+			layers 			= (command.brush.layers >= radius) ? radius : command.brush.layers,
+			incrementRadiusBy 	= Math.floor(radius/layers) || 1;
 
 		context.lineWidth = command.brush.lineWidth;
 		context.strokeStyle = typeof command.color === 'string'
-								? command.color
-								: "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+command.color.a+")";
-
-		radius += incrementRadiusBy;
+					? command.color
+					: "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+command.color.a+")";
 
 		do{
+
 			_drawOval({
 				centerX:centerX,
 				centerY:centerY,
-				radiusX: command.brush.width,
-				radiusY: command.brush.height,
+				radiusX: radius * command.brush.heightRatio,
+				radiusY: radius * command.brush.widthRatio,
 				spin:command.brush.spin,
 				steps:sides,
 				layers:layers,
@@ -271,19 +268,18 @@
 
 			radius -= incrementRadiusBy;
 			layers--;
-			
-		} while(radius>=1 )
+
+		} while(layers)
 
 	};
 
-	function _drawOval(options) {
+	function _drawOval(options) { // a rotated oval
 		var centerX 		= options.centerX,
 			centerY 	= options.centerY,
 			radiusX 	= options.radiusX,
 			radiusY 	= options.radiusY,
 			spin 		= options.spin,
 			steps 		= options.steps,
-			layers 		= options.layers,
 			drawMethod 	= options.drawMethod,
 			i,
 			radian,
@@ -304,7 +300,7 @@
 			xx = centerX+(radiusX*radianCos*spinCos-radiusY*radianSin*spinSin);
 			yy = centerY+(radiusX*radianCos*spinSin+radiusY*radianSin*spinCos);
 
-			drawMethod(i, xx,yy);
+			drawMethod(i, xx, yy);
 		}
 	};
 

@@ -122,7 +122,7 @@
                             +       '<option value="24">24</option>'
                             +       '<option value="32">32</option>'
                             +   '</select>'
-                            + '</div>';                    
+                            + '</div>'; 
                     
                     controls = ''
                         + '<div id="caper-controls">'
@@ -148,11 +148,11 @@
                     $controls.find('.colors .button').click( _private.colorSelect );
                     $controls.find('.brushes .button').click( _private.brushSelect );
                     
-                    $controls.find('#erase').click( _private.erase );
+                    this.eraseButton = $controls.find('#erase').click( _private.erase );
                     
                     $controls
                         .find('#size')
-                        .bind('mouseup mousedown', function(){return false;} )
+                        .bind('mouseup mousedown', function(e){e.stopPropagation();} )
                         .change(function(){
                             var value = this.value;
                             rainbow.size = value;
@@ -167,6 +167,8 @@
                     $me.siblings('.button').removeClass('active'); // super inefficient but im feeling lazy - fix later
                     $me.addClass('active');
                     
+                    _private.disableEraser();
+                    
                     if(this.id === 'fgColor') return;
                     
                     $this.caper('color', options.colors[this.id] ); // this stinks - will fix later
@@ -179,15 +181,23 @@
                     $me.siblings('.button').removeClass('active'); // super inefficient but im feeling lazy - fix later
                     $me.addClass('active');
                     
-                    console.log(options.brushes[this.id]);
-                    
                     $this.caper('brush', options.brushes[this.id] ); // this stinks - will fix later
                 },
                 
+                isEraseEnabled: false,
+                
+                disableEraser: function(){                    
+                    if (_private.isEraseEnabled ){
+                        _private.eraseButton.trigger('click');
+                    }
+                },
+                
                 erase: function(){
-                    var $me = $(this);
-                    $me.toggleClass('active');
-                    rainbow.setErase( $me.hasClass('active') );
+                    var $me = _private.eraseButton;
+
+                    $me.toggleClass ('active');
+                    _private.isEraseEnabled = $me.hasClass('active');
+                    rainbow.setErase(_private.isEraseEnabled);
                 },
                 
                 mouseUp: function( event ){

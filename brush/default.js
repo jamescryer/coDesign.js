@@ -5,9 +5,11 @@ window.brushes['default'] = {
     pressureWave : .1,
     len : 10,
     spin : 20/360,
-    points : 20,
-    layers : 5,
+    points : 30,
+    layers : 20,
     maxPressure : 1,
     minPressure : 1,
-    minSizeRatio: 0.5
+    minSizeRatio: .9,
+    heightRatio: 1,
+    widthRatio: .5
 };
