@@ -54,11 +54,12 @@
 		},
 
 		updateColor: function(options){
-			this.colorOptions = options.color || {};
-			if( typeof this.colorOptions === 'string'){
-				this.color = this.colorOptions;
+			if( typeof this.options === 'string'){
+				this.colorOptions = {};
+				this.color = this.options;
 				this.colors = null;
 			} else {
+				this.colorOptions = options || {};
 				this.colors = _makeColorGradient(this.colorOptions);
 				this.colorsLength = this.colors.length;
 			}
@@ -70,10 +71,11 @@
 		updateBrush: function(options){
 			var i;
 			
+			options = options || {};
+			
 			if( !this.brushOptions ){
-				this.brushOptions = options.brush || {};
+				this.brushOptions = options;
 			} else {
-				options = options.brush || {};
 				for (i in options){
 					if(options.hasOwnProperty(i)){
 						this.brushOptions[i] = options[i] || this.brushOptions[i];
@@ -244,25 +246,24 @@
 				steps:sides,
 				layers:layers,
 				drawMethod: function(i, xx, yy){
-
-					context.beginPath();
-
-					if(!inst.points[layers]) inst.points[layers] = [];
-
-					if( !inst.points[layers][i] ){
-						context.moveTo( xx, yy );
-					}
-					else {
-						context.moveTo(inst.points[layers][i].x, inst.points[layers][i].y);
-					}
-
-					inst.points[layers][i] = {
-						x: xx,
-						y: yy
-					};
-
-					context.lineTo(xx, yy);
-					context.stroke();
+						context.beginPath();
+						
+						if(!inst.points[layers]) inst.points[layers] = [];
+						
+						if( !inst.points[layers][i] ){
+							context.moveTo( xx, yy );
+						}
+						else {
+							context.moveTo(inst.points[layers][i].x, inst.points[layers][i].y);
+						}
+						
+						inst.points[layers][i] = {
+							x: xx,
+							y: yy
+						};
+						
+						context.lineTo(xx, yy);
+						context.stroke();								
 				}
 			});
 

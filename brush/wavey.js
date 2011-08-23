@@ -1,6 +1,6 @@
 window.brushes = window.brushes || {};
 window.brushes['wavey'] = {
-    image: 'brush/wavey.png',
+    name: 'wavey',
     radialWave : .3,
     pressureWave : .1,
     len : 10,

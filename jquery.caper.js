@@ -1,4 +1,4 @@
-(function($, CanvasDraw, CanvasWrite){
+(function($, CanvasDraw, CanvasWrite, CanvasControl){
 
     var drawClients = {},
         writeClients = {},
@@ -87,119 +87,16 @@
                 
                 enableControls: function(){
                     
-                    var controls = '';
-                    
-                    controls += '<div class="brushes option-group">';
-                    $.each(options.brushes, function(name){
-                        var active = (name == 'default' ? 'active': '');
-                        controls +=  '<span class="'+active+' button" id="'+name+'" style="background-image: url('+this.image+')"></span>';
-                    });
-                    controls += '</div>';
-                    
-                    controls += ''
-                            + '<div class="option-group">'
-                            +   '<span class="button" id="erase" style="background-image: url()">'
-                            +   '</span>'
-                            + '</div>';
-                    
-                    controls += '<div class="colors last option-group">';
-                    controls += ''
-                        + '<span class="button active">'
-                        +   '<input value="#f00" maxlength="7" class="miniColors" id="fgColor" autocomplete="off" type="hidden">'
-                        + '</span>'
-                    
-                    $.each(options.colors, function(name){
-                        controls +=  '<span class="button" id="'+name+'" style="background-image: url('+this.image+')"></span>';
+                    new CanvasControl({
+                        brushes: options.brushes,
+                        colors: options.colors,
+                        painter: rainbow,
+                        writer: textRenderer,
+                        $context: $this
                     });
                     
-                    controls += ''
-                            + '<div class="option-group">'
-                            +   '<select id="size">'
-                            +       '<option value="2">2</option>'
-                            +       '<option value="4">4</option>'
-                            +       '<option value="8">8</option>'
-                            +       '<option value="16">16</option>'
-                            +       '<option value="24">24</option>'
-                            +       '<option value="32">32</option>'
-                            +   '</select>'
-                            + '</div>'; 
-                    
-                    controls = ''
-                        + '<div id="caper-controls">'
-                        + controls
-                        + '</div>';
-    
-                    controls = $(controls);
-    
-                    $this.append(controls);
-                    
-                    _private.bindControlEvents(controls);
-                    
                 },
-                
-                bindControlEvents: function( $controls ){
-                    
-                    $controls.find('.miniColors').miniColors({
-                        change: function(hex, rgb) {
-                            $this.caper('color',hex); // this stinks - will fix later
-                        }
-                    });
 
-                    $controls.find('.colors .button').click( _private.colorSelect );
-                    $controls.find('.brushes .button').click( _private.brushSelect );
-                    
-                    this.eraseButton = $controls.find('#erase').click( _private.erase );
-                    
-                    $controls
-                        .find('#size')
-                        .bind('mouseup mousedown', function(e){e.stopPropagation();} )
-                        .change(function(){
-                            var value = this.value;
-                            rainbow.size = value;
-                            rainbow.updateBrush({});
-                        });
-                },
-                
-                colorSelect: function( event ){
-
-                    var $me = $(this);
-                    
-                    $me.siblings('.button').removeClass('active'); // super inefficient but im feeling lazy - fix later
-                    $me.addClass('active');
-                    
-                    _private.disableEraser();
-                    
-                    if(this.id === 'fgColor') return;
-                    
-                    $this.caper('color', options.colors[this.id] ); // this stinks - will fix later
-                },
-                
-                brushSelect: function( event ){
-
-                    var $me = $(this);
-                    
-                    $me.siblings('.button').removeClass('active'); // super inefficient but im feeling lazy - fix later
-                    $me.addClass('active');
-                    
-                    $this.caper('brush', options.brushes[this.id] ); // this stinks - will fix later
-                },
-                
-                isEraseEnabled: false,
-                
-                disableEraser: function(){                    
-                    if (_private.isEraseEnabled ){
-                        _private.eraseButton.trigger('click');
-                    }
-                },
-                
-                erase: function(){
-                    var $me = _private.eraseButton;
-
-                    $me.toggleClass ('active');
-                    _private.isEraseEnabled = $me.hasClass('active');
-                    rainbow.setErase(_private.isEraseEnabled);
-                },
-                
                 mouseUp: function( event ){
                     
                     var top = event.clientY - position.top - document.body.scrollTop,
@@ -329,23 +226,7 @@
                     if (action === 'newline'){ client.newline(); }
                     else
                     if (action === 'backspace'){ client.backspace(); }
-                },
-                
-                applyColor: function( event ){
-                    event.options = {color: event.options};
-                    $.extend(options, event.options);
-                    rainbow.updateColor(event.options);
-                    if(typeof event.options.color === 'string'){
-                        textRenderer.updateColor(event.options.color);
-                    }
-                },
-                
-                applyBrush: function( event ){
-                    event.options = {brush: event.options};
-                    $.extend(options, event.options);
-                    rainbow.updateBrush(event.options);
                 }
-
             }
 
             _private.init();
@@ -354,11 +235,9 @@
                 .bind('mouseup', _private.mouseUp )
                 .bind('paint.rainbow', _private.paint )
                 .bind('write.rainbow', _private.write )
-                .bind('color.rainbow', _private.applyColor )
-                .bind('brush.rainbow', _private.applyBrush )
                 .bind('mousedown', _private.mouseDown )
                 .bind('mousemove', _private.mouseMove );
         });
     };
 
-}(jQuery, CanvasDraw, CanvasWrite ));
+}(jQuery, CanvasDraw, CanvasWrite, CanvasControl));

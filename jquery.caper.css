@@ -1,5 +1,5 @@
 
-#caper-controls{
+.caper-control{
     border-radius: 5px;
     border: 1px solid #ddd;
     padding:3px;
@@ -9,14 +9,7 @@
     left:5px;
     float:left;
     }
-    #caper-controls .option-group{
-        float:left;
-        margin-right: 15px;
-        }
-    #caper-controls .option-group.last{
-        margin-right: 0px;
-        }
-    #caper-controls .button {
+    .caper-control button {
         border-radius: 5px;
         border: 1px solid #ddd;
         float:left;
@@ -28,11 +21,19 @@
         background-position: 1px 1px;
         cursor: pointer;
         }
-    #caper-controls .button.active {
+    .caper-control .button.active {
         border-color: #888;
         }
-    #caper-controls .button:hover {
+    .caper-control .button:hover {
         border-color: #aaa;
         }
     
-
+.caper-brush-default {
+    background: url(brush/default.png) no-repeat top left #fff;
+    }
+.caper-brush-sketchy {
+    background: url(brush/sketchy.png) no-repeat top left #fff;
+    }
+.caper-brush-wavey {
+    background: url(brush/wavey.png) no-repeat top left #fff;
+    }
