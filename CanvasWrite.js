@@ -6,7 +6,7 @@
 		this.fontSize = 22; /*px*/
 		this.fontFamily = 'sans-serif';
 		this.baseline = 'top';
-		this.color = '#ffffff';
+		this.color = options.color || '#fff';
 		this.align = 'left';
 		this.top = 0;
 		this.left = 0;
@@ -16,21 +16,24 @@
 	// public methods
 	window.CanvasWrite.prototype = {
 		begin: function(opts){
+			var context = this.canvas.getContext('2d');
+			
 			this.lastCharacters = [];
 			this.top = opts.top;
 			this.beginLeft = opts.left;
 			this.left = opts.left;
 			this.color = opts.color || this.color;
+			
+			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
+			context.fillStyle = this.color;
+			context.textBaseline = "middle";
 		},
 
 		draw: function(text){
 			var context = this.canvas.getContext('2d'),
 				width = context.measureText(text).width;
 
-			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
-			context.fillStyle = this.color;
 			context.fillText(text, this.left, this.top);
-			context.textBaseline = "middle";
 
 			this.lastCharacters.push({top: this.top, left: this.left, height: this.fontSize, width: width})
 			this.left += width; // move to next character position

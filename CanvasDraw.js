@@ -6,8 +6,8 @@
 		this.id = id++;
 		this.canvas = options.canvas;
 		this.size = options.size;
-		this.updateColor(options);
-		this.updateBrush(options);
+		this.updateColor(options.color || {});
+		this.updateBrush(options.brush || {});
 		this.isActive = false;
 		this.erase = false;
 		this.points = [];
@@ -54,9 +54,10 @@
 		},
 
 		updateColor: function(options){
-			if( typeof this.options === 'string'){
+						
+			if( typeof options === 'string'){
 				this.colorOptions = {};
-				this.color = this.options;
+				this.color = options;
 				this.colors = null;
 			} else {
 				this.colorOptions = options || {};
@@ -183,14 +184,14 @@
 	function _makeBrushGradient( options, size){ // for waveyness
 
 		var i = 0,
-			frequencyR		= options.radialWave || .1,
-			frequencyP		= options.pressureWave || .2,
+			frequencyR		= options.radialWave,
+			frequencyP		= options.pressureWave,
 			len			= options.len || 4,
 			spin			= options.spin || 20/360,
 			points			= options.points || 7,
 			layers 			= options.layers || 4,
-			radiusAmplitude		= size*(options.minSizeRatio||.5) || 10,
-			radiusCenter		= Math.ceil(size*(options.minSizeRatio||.5)) || 6,
+			radiusAmplitude		= size*(options.minSizeRatio||.5),
+			radiusCenter		= Math.ceil(size*(options.minSizeRatio||.5)),
 			pressureAmplitude	= options.maxPressure || 4,
 			pressureCenter		= options.minPressure || 2,
 			brush 			= [],
@@ -198,12 +199,20 @@
 			layers, radius, pressure;
 
 		for (; i < len; ++i){
-			radius = Math.ceil(Math.sin(frequencyR*i) * radiusAmplitude + radiusCenter);
-			pressure = Math.sin(frequencyP*i) * pressureAmplitude + pressureCenter;
+			if(frequencyR && radiusAmplitude){
+				radius = Math.ceil(Math.sin(frequencyR*i) * radiusAmplitude + radiusCenter);
+			} else {
+				radius = size;
+			}
+			if(frequencyP && pressureAmplitude){
+				pressure = Math.sin(frequencyP*i) * pressureAmplitude + pressureCenter;	
+			}else{
+				pressure = 1; //not currently in use
+			}
 
 			brush.push({
 				layers : layers,
-				pointsPerLayer: points,
+				pointsPerLayer: points, //Math.floor(Math.random() * points),
 				lineWidth: pressure,
 				size: radius,
 				spin: spin,

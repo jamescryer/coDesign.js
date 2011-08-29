@@ -4,7 +4,7 @@
 		+ '<div class="caper-control">'
 		+ 	'<button id="caper-selected-brush" class="caper-brush-<%=defaultBrush%>"></button>'
 		+ 	'<button id="caper-selected-color" class="caper-color-<%=defaultColor%>"></button>'
-		+ 	'<button id="caper-selected-size" class="caper-size-<%=defaultSize%>"></button>'
+		+ 	'<button id="caper-selected-size" class="caper-size-<%=defaultSize%>">1</button>'
 		+ 	'</div>'
 		+ 	'<div class="caper-dropdown" id="caper-brushes" style="display:none">'
 		+ 		'<% for (var i in brushes) { %>'
@@ -16,7 +16,7 @@
 		+ 	'<div class="caper-dropdown" id="caper-colors" style="display:none">'
 		+		'<div id="caper-color-picker">'
 		+		'</div>'
-		+		'<button data-name="eraser" class="caper-color-eraser"></button>'
+		+		'<button data-name="eraser" id="eraser" class="caper-color-eraser"></button>'
 		+ 		'<% for (var i in colors) { %>'
 		+ 			'<% if(colors.hasOwnProperty(i)) { %>'
 		+				'<button data-name="<%=i%>" class="caper-color-<%=i%>"></button>'
@@ -24,8 +24,8 @@
 		+ 		'<%} %>'
 		+ 	'</div>'
 		+ 	'<div class="caper-dropdown" id="caper-sizes" style="display:none">'
-		+ 		'<% for (var i = 0, len = sizes.length; i++ < len;) { %>'
-		+			'<button data-value="<%=sizes[i]%>" class="caper-size-<%=sizes[i]%>"></button>'
+		+ 		'<% for (var i = sizes.length; i-- > 0;) { %>'
+		+			'<button data-value="<%=sizes[i]%>" class="caper-size-<%=sizes[i]%>"><%=sizes[i]%></button>'
 		+ 		'<%} %>'
 		+ 	'</div>'
 		+ '</div>';
@@ -40,6 +40,7 @@
 		this.colors = options.colors || {};
 		this.sizes = options.sizes || [1,3,5,8,16,32];
 		this.$context = options.$context;
+		this.defaultColor = options.defaultColor || '#f00';
 
 		buildAndBind(this);
 	};
@@ -58,11 +59,10 @@
 			brushes: _.brushes,
 			colors: _.colors,
 			defaultBrush: _.brushes.default.name || '',
-			defaultColor: '#f00'.replace('#',''),
+			defaultColor: _.defaultColor.replace('#',''),
 			defaultSize: 2,
 			sizes: _.sizes
 		});
-		
 		
 		var $control = $(htmlString).appendTo(_.$context);
 		
@@ -88,29 +88,19 @@
 		_.$colorPicker = $('#caper-color-picker');
 		
 		_.$colorButton.css({
-			backgroundColor: '#f00'
+			backgroundColor: _.defaultColor
 		});
 		
 		$.farbtastic(_.$colorPicker).
-			setColor('#f00').
+			setColor(_.defaultColor).
 			linkTo(function(hex){
-				
-				_.painter.setErase(false);
-				_.painter.updateColor(hex);
-				_.writer.updateColor(hex);
-				
-				rmColorClass(_);
-				
-				_.$colorButton.css({
-					backgroundColor: hex
-				});
-				
+				selectColor(_, $control, _.$colorPicker, hex);
 			});
 		
 		_.$colorDropdown.
 			find('button').
 			click(function(){
-				selectColor(_, $control, $(this));
+				selectComplexColor(_, $control, $(this));
 			});
 		
 		_.$brushDropdown.
@@ -119,20 +109,19 @@
 				selectBrush(_, $control, $(this));
 			});
 		
-		_.$eraseButton = $('#erase').
+		_.$eraseButton = $('#eraser').
 			click(function(){
-				erase(_, $control, _.$eraseButton);
+				selectColor(_, $control, _.$eraseButton, '#fff');
 			});
 		
 		_.$sizeDropdown.
 			find('button').
 			click(function(){
-				selectSize(_, $control, _.$size);
+				selectSize(_, $control, $(this));
 			});
 	}
 	
 	function bindDropdown($dropdown, $button){
-		$dropdown.click(function(e){e.stopPropagation();});
 		$button.
 			bind('mouseup mousedown', function(e){e.stopPropagation();} ).
 			click(
@@ -145,9 +134,9 @@
 							left: pos.left + ($button.outerWidth()/2)
 						}).
 						toggle();
-						
+
 					e.stopPropagation();
-					
+
 				});
 	}
 	
@@ -159,11 +148,33 @@
 			_.$selectedBrush.removeClass('active');
 		}
 		
+		rmBrushClass(_);
 		_.$selectedBrush = $button.addClass('active');
+		_.$brushButton.addClass('caper-brush-'+name);	
         _.painter.updateBrush(_.brushes[name]);
 	}
 	
-	function selectColor(_, $control, $button){
+		
+	function rmBrushClass(_){
+		if(_.$selectedBrush){
+			_.$brushButton.removeClass('caper-brush-'+_.$selectedBrush.data('name'));	
+		}
+	}
+	
+	function selectColor(_, $control, $button, hex){
+						
+		_.painter.setErase(false);
+		_.painter.updateColor(hex);
+		_.writer.updateColor(hex);
+		
+		rmColorClass(_);
+		
+		_.$colorButton.css({
+			backgroundColor: hex
+		});
+	}
+	
+	function selectComplexColor(_, $control, $button){
 		
 		var name = $button.data('name');
 		
@@ -175,18 +186,18 @@
 		}
 		_.$selectedColor = $button.addClass('active');
 		
-		if(name === 'erase'){
+		/*if(name === 'erase'){
 			_.painter.setErase(true);
-		} else {
+		} else {*/
 			_.$colorButton.
 				css({
 					backgroundColor: '#fff'
 				}).
 				addClass('caper-color-'+name);
 				
-			_.painter.setErase(false);
+			//_.painter.setErase(false);
 			_.painter.updateColor(_.colors[name]);
-		}
+		/*}*/
 	}
 	
 	function rmColorClass(_){
@@ -197,8 +208,15 @@
 	
 	function selectSize(_, $control, $button){
 		var value = $button.data('value');
-		_.$selectedSize.removeClass('active');
+		
+		if(_.$selectedSize){
+			_.$selectedSize.removeClass('active');	
+		}
+		
 		_.$selectedSize = $button.addClass('active');
+		
+		_.$sizeButton.text(value);
+		
 		_.painter.size = value;
 		_.painter.updateBrush({});
 	}

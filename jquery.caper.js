@@ -46,7 +46,8 @@
                     });
         
                     textRenderer = new CanvasWrite({
-                        canvas:canvas.get(0)
+                        canvas:canvas.get(0),
+                        color: options.color
                     });
         
                     textarea = $('<textarea style="position: absolute; left: -10px; top: -10px; height:0px; width: 0px;"></textarea>')
@@ -92,7 +93,8 @@
                         colors: options.colors,
                         painter: rainbow,
                         writer: textRenderer,
-                        $context: $this
+                        $context: $this,
+                        defaultColor: options.color
                     });
                     
                 },
