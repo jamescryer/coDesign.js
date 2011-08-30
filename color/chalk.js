@@ -7,7 +7,7 @@ window.colors['chalk'] = {
     phaseR : .1,
     phaseG : .1,
     phaseB : .1,
-    alpha : .3,
+    alpha : .5,
     center : 127,
     width : 80,
     len : 50

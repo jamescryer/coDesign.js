@@ -3,14 +3,16 @@
 	var id = 1;
 
 	window.CanvasDraw = function( options ){
-		this.id = id++;
-		this.canvas = options.canvas;
-		this.size = options.size;
-		this.updateColor(options.color || {});
-		this.updateBrush(options.brush || {});
-		this.isActive = false;
-		this.erase = false;
-		this.points = [];
+		var _=this;
+		
+		_.id = id++;
+		_.canvas = options.canvas;
+		_.size = options.size;
+		_.updateColor(options.color || {});
+		_.updateBrush(options.brush || {});
+		_.isActive = false;
+		_.erase = false;
+		_.points = [];
 	};
 
 	// public methods
@@ -28,17 +30,18 @@
 		},
 
 		draw: function(instructions){
-			var command, color, brush, size;
+			var command, color, brush, size, _ = this;
 
-			if( !this.isActive ) return this;
+			if( !_.isActive ) return _;
 
-			if (this.erase) {
-				this.canvas.getContext('2d').clearRect ( instructions.x-(this.size/2), instructions.y-(this.size/2), this.size, this.size );
-				return this;
+			if (_.erase) {
+				_.canvas.getContext('2d').clearRect ( instructions.x-(_.size/2), instructions.y-(_.size/2), _.size, _.size );
+				return _;
 			}
 
-			this.color = color = instructions.color || _getColor(this);
-			brush = instructions.brush || _getBrush(this);
+			_.color = color = instructions.color || _getColor(_);
+		
+			brush = instructions.brush || _getBrush(_);
 
 			command = {
 				x: instructions.x,
@@ -47,48 +50,39 @@
 				brush: brush
 			};
 
-			this.brush = brush;
+			_.brush = brush;
 
-			_draw(this, command);
-			return this;
+			_draw(_, command);
+			return _;
 		},
 
 		updateColor: function(options){
-						
+		    var _ = this;
+		
 			if( typeof options === 'string'){
-				this.colorOptions = {};
-				this.color = options;
-				this.colors = null;
+				_.colorOptions = {};
+				_.color = options;
+				_.colors = null;
 			} else {
-				this.colorOptions = options || {};
-				this.colors = _makeColorGradient(this.colorOptions);
-				this.colorsLength = this.colors.length;
+				_.colorOptions = options || {};
+				_.colors = _makeColorGradient(_.colorOptions);
+				_.colorsLength = _.colors.length;
 			}
 
-			this.colorCyclePos = 0;
-			this.colorReverse = false;
+			_.colorCyclePos = 0;
+			_.colorReverse = false;
 		},
 
 		updateBrush: function(options){
-			var i;
+			var i, _ = this;
 			
-			options = options || {};
-			
-			if( !this.brushOptions ){
-				this.brushOptions = options;
-			} else {
-				for (i in options){
-					if(options.hasOwnProperty(i)){
-						this.brushOptions[i] = options[i] || this.brushOptions[i];
-					}
-				}
-			}
+			if(options) _.brushOptions = options;
+				
+			_.brushes = _makeBrushGradient(_.brushOptions, _.size);
+			_.brushLength = _.brushes.length;
 
-			this.brushes = _makeBrushGradient(this.brushOptions, this.size);
-			this.brushLength = this.brushes.length;
-
-			this.brushCyclePos = 0;
-			this.brushReverse = false;
+			_.brushCyclePos = 0;
+			_.brushReverse = false;
 		},
 		
 		setErase: function(bool){
@@ -98,75 +92,74 @@
 
 	// private methods
 
-	function _getColor( inst ){
+	function _getColor(_){
 		var i;
 
-		if(!inst.colors){
-			return inst.color;
+		if(!_.colors){
+			return _.color;
 		}
 
-		if( inst.colorReverse ){
-			if (inst.colorCyclePos === 0 ){
+		if( _.colorReverse ){
+			if (_.colorCyclePos === 0 ){
 				i = 1;
-				inst.colorReverse = false;
+				_.colorReverse = false;
 			} else {
 				i = -1;
-				inst.colorReverse = true;
+				_.colorReverse = true;
 			}
 		} else {
-			if(inst.colorCyclePos === inst.colorsLength){
+			if(_.colorCyclePos === _.colorsLength){
 				i = -1;
-				inst.colorReverse = true;
+				_.colorReverse = true;
 			} else{
 				i = 1;
-				inst.colorReverse = false;
+				_.colorReverse = false;
 			}
 		}
-		return inst.colors[inst.colorCyclePos+=i];
+		return _.colors[_.colorCyclePos+=i];
 	}
 
-	function _getBrush( inst ){
+	function _getBrush(_){
 		var i;
-		if( inst.brushReverse ){
-			if (inst.brushCyclePos === 0 ){
+		if( _.brushReverse ){
+			if (_.brushCyclePos === 0 ){
 				i = 1;
-				inst.brushReverse = false;
+				_.brushReverse = false;
 			} else {
 				i = -1;
-				inst.brushReverse = true;
+				_.brushReverse = true;
 			}
 		} else {
-			if(inst.brushCyclePos === inst.brushLength){
+			if(_.brushCyclePos === _.brushLength){
 				i = -1;
-				inst.brushReverse = true;
+				_.brushReverse = true;
 			} else{
 				i = 1;
-				inst.brushReverse = false;
+				_.brushReverse = false;
 			}
 		}
-		return inst.brushes[inst.brushCyclePos+=i];
+		return _.brushes[_.brushCyclePos+=i];
 	}
 
-	function _makeColorGradient( options ){
+	function _makeColorGradient( o ){
 
 		// adapted from: http://www.krazydad.com/makecolors.php
 
-		var frequencyR 	= options.frequencyR || .1,
-			frequencyG	= options.frequencyG || .1,
-			frequencyB	= options.frequencyB || .1,
-			phaseR		= options.phaseR || .1,
-			phaseG		= options.phaseG || .1,
-			phaseB		= options.phaseB || .1,
-			alpha		= options.alpha || .3,
-			center		= options.center || 200,
-			width		= options.width || /*127*/100,
-			len		= options.len || 50,
+		var frequencyR 	= o.frequencyR || .1,
+			frequencyG	= o.frequencyG || .1,
+			frequencyB	= o.frequencyB || .1,
+			phaseR		= o.phaseR || .1,
+			phaseG		= o.phaseG || .1,
+			phaseB		= o.phaseB || .1,
+			alpha		= o.alpha || .3,
+			center		= o.center || 200,
+			width		= o.width || /*127*/100,
+			len			= o.len || 50,
 			rainbow 	= [],
 
-			red, grn, blu;
+			red, grn, blu, i;
 
-		for (var i = 0; i < len; ++i)
-		{
+		for (i = 0; ++i < len;){
 			red = Math.sin(frequencyR*i + phaseR) * width + center;
 			grn = Math.sin(frequencyG*i + phaseG) * width + center;
 			blu = Math.sin(frequencyB*i + phaseB) * width + center;
@@ -181,92 +174,110 @@
 		return rainbow;
 	}
 
-	function _makeBrushGradient( options, size){ // for waveyness
+	function _makeBrushGradient(o, size){ // for waveyness
 
 		var i = 0,
-			frequencyR		= options.radialWave,
-			frequencyP		= options.pressureWave,
-			len			= options.len || 4,
-			spin			= options.spin || 20/360,
-			points			= options.points || 7,
-			layers 			= options.layers || 4,
-			radiusAmplitude		= size*(options.minSizeRatio||.5),
-			radiusCenter		= Math.ceil(size*(options.minSizeRatio||.5)),
-			pressureAmplitude	= options.maxPressure || 4,
-			pressureCenter		= options.minPressure || 2,
-			brush 			= [],
+			len					= o.len || 4,
+			spin				= o.spin/360 || 20/360,
+			points				= o.points || 7,
+			layers 				= o.layers || 4,
+			
+			radiusOpts 			= o.size || {max:.5, min:null, wave: null},
+			radiusAmplitude		= Math.ceil(size*(radiusOpts.min||.1)),
+			radiusCenter		= Math.ceil(size*(radiusOpts.max||.1)),
+			
+			pressure 			= o.pressure || {max:4, min:2, wave:.3},
+			
+			brush 				= [],
 
-			layers, radius, pressure;
+			layers, radius, lineWidth;
 
-		for (; i < len; ++i){
-			if(frequencyR && radiusAmplitude){
-				radius = Math.ceil(Math.sin(frequencyR*i) * radiusAmplitude + radiusCenter);
+		for (; i++ < len;){
+			if(radiusOpts.wave && radiusAmplitude){
+				radius = Math.ceil(Math.sin(radiusOpts.wave*i) * radiusAmplitude + radiusCenter);
 			} else {
 				radius = size;
 			}
-			if(frequencyP && pressureAmplitude){
-				pressure = Math.sin(frequencyP*i) * pressureAmplitude + pressureCenter;	
+			if(pressure.wave && pressure.max){
+				lineWidth = Math.sin(pressure.wave*i) * pressure.max + pressure.min;	
 			}else{
-				pressure = 1; //not currently in use
+				lineWidth = pressure.max || 2;
 			}
 
 			brush.push({
 				layers : layers,
-				pointsPerLayer: points, //Math.floor(Math.random() * points),
-				lineWidth: pressure,
+				pointsPerLayer: points,
+				lineWidth: lineWidth,
 				size: radius,
+				spinDegree: o.spin,
 				spin: spin,
-				widthRatio: options.widthRatio || 1,
-				heightRatio: options.heightRatio || 1
+				widthRatio: o.widthRatio || 1,
+				heightRatio: o.heightRatio || 1,
+				radiusOpts: radiusOpts,
+				pressure: pressure,
+				connectLines: o.connectLines,
+				randomiseSpin: o.randomiseSpin,
+				randomizePoints: o.randomizePoints
 			});
 		}
 
 		return brush;
 	}
 
-	function _draw( inst, command ){
+	function _draw(_, command ){
 
 		// adapted from: http://www.pixelwit.com/blog/2007/06/basic-circle-drawing-actionscript/
 
 		if (!command.brush) return;
 		if (!command.color) return;
 
-		var context 			= inst.canvas.getContext('2d'),
+		var context 		= _.canvas.getContext('2d'),
+			brush			= command.brush,
 			centerX 		= command.x,
 			centerY 		= command.y,
-			radius 			= command.brush.size,
-			sides 			= command.brush.pointsPerLayer,
-			layers 			= (command.brush.layers >= radius) ? radius : command.brush.layers,
+			radius 			= brush.size,
+			sides 			= brush.pointsPerLayer,
+			spin			= brush.spin,
+			layers 			= (brush.layers >= radius) ? radius : brush.layers,
 			incrementRadiusBy 	= Math.floor(radius/layers) || 1;
 
-		context.lineWidth = command.brush.lineWidth;
+		context.lineWidth = brush.lineWidth;
 		context.strokeStyle = typeof command.color === 'string'
 					? command.color
 					: "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+command.color.a+")";
+
+		context.globalAlpha = brush.pressure.softness || 1;
 
 		do{
 
 			_drawOval({
 				centerX:centerX,
 				centerY:centerY,
-				radiusX: radius * command.brush.heightRatio,
-				radiusY: radius * command.brush.widthRatio,
-				spin:command.brush.spin,
-				steps:sides,
+				radiusX: radius * brush.heightRatio,
+				radiusY: radius * brush.widthRatio,
+				spin: brush.randomizeSpin ? Math.floor(Math.random() * (brush.spinDegree+1))/360 : spin,
+				steps: brush.randomizePoints ? Math.floor(Math.random() * sides+1) : sides,
 				layers:layers,
 				drawMethod: function(i, xx, yy){
+
+						var connectWithPrevious = brush.connectLines !== false;
+
+						if(brush.pressure.randomize){
+								context.lineWidth = Math.floor(Math.random() * (brush.lineWidth+1));
+						}
+						
 						context.beginPath();
 						
-						if(!inst.points[layers]) inst.points[layers] = [];
+						if(!_.points[layers]) _.points[layers] = [];
 						
-						if( !inst.points[layers][i] ){
-							context.moveTo( xx, yy );
+						if( !_.points[layers][i] || !connectWithPrevious){
+							context.moveTo( xx-1, yy-1 );
 						}
 						else {
-							context.moveTo(inst.points[layers][i].x, inst.points[layers][i].y);
+							context.moveTo(_.points[layers][i].x, _.points[layers][i].y);
 						}
 						
-						inst.points[layers][i] = {
+						_.points[layers][i] = {
 							x: xx,
 							y: yy
 						};

@@ -218,7 +218,7 @@
 		_.$sizeButton.text(value);
 		
 		_.painter.size = value;
-		_.painter.updateBrush({});
+		_.painter.updateBrush();
 	}
 	
 

@@ -154,7 +154,7 @@
                             });
                         }
 
-                    },50);
+                    },75);
                 },
                 
                 mouseMove: function( event ){
