@@ -1,13 +1,25 @@
 window.brushes = window.brushes || {};
 window.brushes['sketchy'] = {
     name: 'sketchy',
-    radialWave : .1,
-    pressureWave : .1,
-    len : 10,
-    spin : 30/360,
-    points : 6,
-    layers : 3,
-    maxPressure : 3,
-    minPressure : 1,
-    minSizeRatio: 0.5
+    len : 50,
+	randomizePoints: true,
+    points : 2,
+    layers : 20,
+    randomizeSpin: true,
+    spin: 45,
+	connectLines: true,
+	
+	size: {
+		wave: .9,
+		min: .1,
+		max: 3
+	},
+	
+	pressure: {
+		min: 2,
+		max: 3,
+		wave: .2,
+		randomize: true,
+		softness: .5
+	}
 };

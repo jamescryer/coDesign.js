@@ -1,13 +1,25 @@
 window.brushes = window.brushes || {};
 window.brushes['wavey'] = {
     name: 'wavey',
-    radialWave : .3,
-    pressureWave : .1,
-    len : 10,
-    spin : 20/360,
-    points : 5,
-    layers : 5,
-    maxPressure : 10,
-    minPressure : 1,
-    minSizeRatio: 0.5
+    len : 50,
+	randomizePoints: false,
+    points : 50,
+    layers : 50,
+    randomizeSpin: false,
+    spin: 45,
+	connectLines: true,
+	
+	/*size: {
+		wave: 10,
+		min: .1,
+		max: .5
+	},*/
+	
+	pressure: {
+		/*min: 2,
+		max: 3,
+		wave: .2,
+		randomize: false,*/
+		softness: .5
+	}
 };

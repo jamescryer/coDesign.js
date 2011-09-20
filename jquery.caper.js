@@ -31,7 +31,9 @@
             options     = $.extend({}, defaults, opts || {});
             width       = options.width || $this.width();
             height      = options.fullScreen ? $(window).height() : (options.height || $this.height());
+
             canvas      = $('<canvas width="'+width+'" height="'+height+'" />').prependTo($this);
+            
             position    = $this.offset();
 
             _private = {

@@ -1,64 +1,140 @@
 
 .caper-control{
-    border-radius: 5px;
-    -moz-border-radius: 5px;
-    border: 1px solid #ddd;
-    padding:3px;
+    border-radius: 0px 3px 3px 3px;
+    -moz-border-radius: 0px 3px 3px 3px;
+    border: 1px solid #333;
+    background: #333;
+    padding:2px;
     position:absolute;
     z-index: 999;
-    top:16px;
-    left:5px;
+    top:0;
+    left:0;
     float:left;
+    width:200px;
     }
     .caper-dropdown button,
     .caper-control button {
-        border-radius: 5px;
-        -moz-border-radius: 5px;
-        border: 2px solid #ddd;
+        border-radius: 3px;
+        -moz-border-radius: 3px;
+        border: 1px solid #333;
         float:left;
         margin-right:3px;
         padding:2px;
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
         background-repeat: no-repeat;
-        background-position: 0 0;
         cursor: pointer;
         color: #555;
         font-size: 10px;
         }
-    .caper-dropdown button.active,
-    .caper-control button.active {
-        border-color: #888;
-        }
-    .caper-dropdown button:hover,
-    .caper-control button:hover {
-        border-color: #aaa;
+        .caper-dropdown button{
+            background-color: transparent;
+            color: #FFFFFF;
+            display: block;
+            float: none;
+            font-size: 11px;
+            height: 36px;
+            margin-bottom: 3px;
+            padding-left: 37px;
+            width: auto;
+            border: 1px solid #555;
+            text-align: left;
+            width: 100%;
+            }
+            .caper-dropdown button:last-child{
+                margin-bottom: 0px;
+                }
+        .caper-dropdown button:last-child,
+        .caper-control button:last-child {
+            margin-right:0;
+            }
+        .caper-control button.disabled{
+            opacity: .3;    
+            }
+        .caper-dropdown button.active,
+        .caper-control button.active {
+            border-color: #888;
+            }
+        .caper-dropdown button:hover,
+        .caper-control button:hover {
+            border-color: #aaa;
+            }
+    .caper-control .group{
+        border-left: 1px solid #666;
+        float: left;
+        padding-left: 2px;   
         }
     .caper-dropdown {
         position:absolute;
-        z-index: 999;
-        background: #fff;
-        border-radius: 5px;
-        border: 1px solid #ddd;
-        padding: 7px;
+        z-index: 998;
+        padding: 31px 2px 2px 2px;
+        background: #555;
+        border-radius: 0px 3px 3px 3px;
+        -moz-border-radius: 0px 3px 3px 3px;
+        border: 1px solid #555;
+        top:0;
+        left:0;
+        width: 200px;
         }
     
 .caper-brush-default {
-    background: url(brush/default.png) no-repeat top left #fff;
+    background: url(images/sketchy22.png) no-repeat top left transparent;
     }
 .caper-brush-sketchy {
-    background: url(brush/sketchy.png) no-repeat top left #fff;
+    background: url(images/ribbon22.png) no-repeat top left transparent;
     }
 .caper-brush-wavey {
-    background: url(brush/wavey.png) no-repeat top left #fff;
+    background: url(images/smooth22.png) no-repeat top left transparent;
+    }
+.caper-dropdown .caper-brush-default {
+    background: url(images/sketchy.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-brush-sketchy {
+    background: url(images/ribbon.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-brush-wavey {
+    background: url(images/smooth.png) no-repeat 1px 1px transparent;
     }
     
+    
+    
 .caper-color-chalk {
-    background: url(color/chalk.png) no-repeat top left #fff;
+    background: url(images/chalk22.png) no-repeat top left #fff;
     }
 .caper-color-chrome {
-    background: url(color/chrome.png) no-repeat top left #fff;
+    background: url(images/autumn22.png) no-repeat top left #fff;
     }
 .caper-color-rainbow {
-    background: url(color/rainbow.png) no-repeat top left #fff;
+    background: url(images/rainbow22.png) no-repeat top left #fff;
     }
+.caper-dropdown .caper-color-chalk {
+    background: url(images/chalk.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-color-chrome {
+    background: url(images/autumn.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-color-rainbow {
+    background: url(images/rainbow.png) no-repeat 1px 1px transparent;
+    }
+
+
+.caper-size-1{
+    background: url(images/small22.png) no-repeat top left transparent;
+    }
+.caper-size-16{
+    background: url(images/medium22.png) no-repeat top left transparent;
+    }
+.caper-size-32{
+    background: url(images/large22.png) no-repeat top left transparent;
+    }
+.caper-dropdown .caper-size-1{
+    background: url(images/small.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-size-16{
+    background: url(images/medium.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-size-32{
+    background: url(images/large.png) no-repeat 1px 1px transparent;
+    }
+    
+    

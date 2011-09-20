@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>caper.js - fullscreen</title>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+		
+		<script type="text/javascript" src="libs/farbtastic/farbtastic.js"></script>
+		<link href="libs/farbtastic/farbtastic.css" rel="stylesheet" type="text/css" />
+		
+		<script type="text/javascript" src="brush/default.js"></script>
+		<script type="text/javascript" src="brush/sketchy.js"></script>
+		<script type="text/javascript" src="brush/wavey.js"></script>
+		
+		<script type="text/javascript" src="color/chrome.js"></script>
+		<script type="text/javascript" src="color/rainbow.js"></script>
+		<script type="text/javascript" src="color/chalk.js"></script>
+		
+		<script type="text/javascript" src="CanvasDraw.js"></script>
+		<script type="text/javascript" src="CanvasWrite.js"></script>
+		<script type="text/javascript" src="CanvasControl.js"></script>
+		<script type="text/javascript" src="jquery.caper.js"></script>
+		
+		<style>
+			body {
+				overflow:hidden;
+				margin:0;
+			}
+		</style>
+		
+		<link href="jquery.caper.css" rel="stylesheet" type="text/css" />
+	</head>
+	<body>
+		<div id="rainbow" style="position:absolute; top: 100px; left: 100px; border:1px solid #ccc; width: 300px; height: 300px;"></div>
+		<script>
+			$('#rainbow').caper({
+				brushes: window.brushes,
+				colors: window.colors,
+				controlPanel: true,
+				brushSize: 2,
+				color: '#f00',
+				onDraw: function(event){},
+				onWrite: function(event){}
+			});
+		</script>
+	</body>
+</html>

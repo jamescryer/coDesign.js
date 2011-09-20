@@ -3,30 +3,37 @@
 	var view = ''
 		+ '<div class="caper-control">'
 		+ 	'<button id="caper-selected-brush" class="caper-brush-<%=defaultBrush%>"></button>'
-		+ 	'<button id="caper-selected-color" class="caper-color-<%=defaultColor%>"></button>'
-		+ 	'<button id="caper-selected-size" class="caper-size-<%=defaultSize%>">1</button>'
+		+	'<span class="group">'
+		+ 		'<button id="caper-selected-size" class="caper-size-<%=defaultSize%>"></button>'
+		+	'</span>'
+		+	'<span class="group">'
+		+ 		'<button id="caper-selected-color" class="caper-color-<%=defaultColor%>"></button>'
+		+ 		'<button id="caper-selected-gradient" class="disabled"></button>'
+		+ 		'<button data-name="eraser" id="eraser" class="caper-color-eraser last disabled"></button>'
+		+	'</span>'
 		+ 	'</div>'
 		+ 	'<div class="caper-dropdown" id="caper-brushes" style="display:none">'
 		+ 		'<% for (var i in brushes) { %>'
 		+ 			'<% if(brushes.hasOwnProperty(i)) { %>'
-		+				'<button data-name="<%=i%>" class="caper-brush-<%=i%>"></button>'
+		+				'<button data-name="<%=i%>" class="caper-brush-<%=i%>"><%=i%></button>'
 		+ 			'<%} %>'
 		+ 		'<%} %>'
 		+ 	'</div>'
 		+ 	'<div class="caper-dropdown" id="caper-colors" style="display:none">'
 		+		'<div id="caper-color-picker">'
 		+		'</div>'
-		+		'<button data-name="eraser" id="eraser" class="caper-color-eraser"></button>'
+		+ 	'</div>'
+		+ 	'<div class="caper-dropdown" id="caper-gradient" style="display:none">'
 		+ 		'<% for (var i in colors) { %>'
 		+ 			'<% if(colors.hasOwnProperty(i)) { %>'
-		+				'<button data-name="<%=i%>" class="caper-color-<%=i%>"></button>'
+		+				'<button data-name="<%=i%>" class="caper-color-<%=i%>"><%=i%></button>'
 		+ 			'<%} %>'
 		+ 		'<%} %>'
 		+ 	'</div>'
 		+ 	'<div class="caper-dropdown" id="caper-sizes" style="display:none">'
-		+ 		'<% for (var i = sizes.length; i-- > 0;) { %>'
-		+			'<button data-value="<%=sizes[i]%>" class="caper-size-<%=sizes[i]%>"><%=sizes[i]%></button>'
-		+ 		'<%} %>'
+		+			'<button data-value="1" class="caper-size-1">small</button>'
+		+			'<button data-value="16" class="caper-size-16">medium</button>'
+		+			'<button data-value="32" class="last caper-size-32">large</button>'
 		+ 	'</div>'
 		+ '</div>';
 		
@@ -38,7 +45,7 @@
 		this.writer = options.writer;
 		this.brushes = options.brushes || {};
 		this.colors = options.colors || {};
-		this.sizes = options.sizes || [1,3,5,8,16,32];
+		this.sizes = options.sizes || [1,16,32];
 		this.$context = options.$context;
 		this.defaultColor = options.defaultColor || '#f00';
 
@@ -60,7 +67,7 @@
 			colors: _.colors,
 			defaultBrush: _.brushes.default.name || '',
 			defaultColor: _.defaultColor.replace('#',''),
-			defaultSize: 2,
+			defaultSize: 1,
 			sizes: _.sizes
 		});
 		
@@ -78,11 +85,15 @@
 		_.$colorDropdown = $('#caper-colors');
 		_.$colorButton = $('#caper-selected-color');
 		
+		_.$gradientDropdown = $('#caper-gradient');
+		_.$gradientButton = $('#caper-selected-gradient');
+		
 		_.$sizeDropdown = $('#caper-sizes');
 		_.$sizeButton = $('#caper-selected-size');
 		
 		bindDropdown(_.$brushDropdown, _.$brushButton);
 		bindDropdown(_.$colorDropdown, _.$colorButton);
+		bindDropdown(_.$gradientDropdown, _.$gradientButton);
 		bindDropdown(_.$sizeDropdown, _.$sizeButton);
 		
 		_.$colorPicker = $('#caper-color-picker');
@@ -97,7 +108,7 @@
 				selectColor(_, $control, _.$colorPicker, hex);
 			});
 		
-		_.$colorDropdown.
+		_.$gradientDropdown.
 			find('button').
 			click(function(){
 				selectComplexColor(_, $control, $(this));
@@ -112,6 +123,11 @@
 		_.$eraseButton = $('#eraser').
 			click(function(){
 				selectColor(_, $control, _.$eraseButton, '#fff');
+				
+				_.$gradientButton.addClass('disabled');
+				_.$colorButton.addClass('disabled');
+				_.$eraseButton.removeClass('disabled');
+				
 			});
 		
 		_.$sizeDropdown.
@@ -126,13 +142,13 @@
 			bind('mouseup mousedown', function(e){e.stopPropagation();} ).
 			click(
 				function(e){
-					var pos = $button.offset();
+					var pos = $button.position();
 					
 					$dropdown.
-						css({
-							top: pos.top + ($button.outerHeight()/2),
-							left: pos.left + ($button.outerWidth()/2)
-						}).
+						/*css({
+							top: pos.top + ($button.outerHeight()/1.5),
+							left: pos.left + ($button.outerWidth()/1.5)
+						}).*/
 						toggle();
 
 					e.stopPropagation();
@@ -167,7 +183,11 @@
 		_.painter.updateColor(hex);
 		_.writer.updateColor(hex);
 		
-		rmColorClass(_);
+		//rmColorClass(_);
+		
+		_.$gradientButton.addClass('disabled');
+		_.$colorButton.removeClass('disabled');
+		_.$eraseButton.addClass('disabled');
 		
 		_.$colorButton.css({
 			backgroundColor: hex
@@ -186,13 +206,17 @@
 		}
 		_.$selectedColor = $button.addClass('active');
 		
+		_.$gradientButton.removeClass('disabled');
+		_.$colorButton.addClass('disabled');
+		_.$eraseButton.addClass('disabled');
+		
 		/*if(name === 'erase'){
 			_.painter.setErase(true);
 		} else {*/
-			_.$colorButton.
-				css({
+			_.$gradientButton.
+				/*css({
 					backgroundColor: '#fff'
-				}).
+				}).*/
 				addClass('caper-color-'+name);
 				
 			//_.painter.setErase(false);
@@ -202,7 +226,7 @@
 	
 	function rmColorClass(_){
 		if(_.$selectedColor){
-			_.$colorButton.removeClass('caper-color-'+_.$selectedColor.data('name'));	
+			_.$gradientButton.removeClass('caper-color-'+_.$selectedColor.data('name'));	
 		}
 	}
 	
@@ -210,12 +234,12 @@
 		var value = $button.data('value');
 		
 		if(_.$selectedSize){
-			_.$selectedSize.removeClass('active');	
+			_.$selectedSize.removeClass('active');
+			_.$sizeButton.removeClass('caper-size-'+_.$selectedSize.data('value'));
 		}
 		
 		_.$selectedSize = $button.addClass('active');
-		
-		_.$sizeButton.text(value);
+		_.$sizeButton.addClass('caper-size-'+value);
 		
 		_.painter.size = value;
 		_.painter.updateBrush();
