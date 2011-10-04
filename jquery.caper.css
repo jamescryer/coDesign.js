@@ -20,8 +20,8 @@
         float:left;
         margin-right:3px;
         padding:2px;
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: 16px;
         background-repeat: no-repeat;
         cursor: pointer;
         color: #555;
@@ -67,7 +67,7 @@
     .caper-dropdown {
         position:absolute;
         z-index: 998;
-        padding: 31px 2px 2px 2px;
+        padding: 24px 2px 2px 2px;
         background: #555;
         border-radius: 0px 3px 3px 3px;
         -moz-border-radius: 0px 3px 3px 3px;
@@ -78,13 +78,13 @@
         }
     
 .caper-brush-default {
-    background: url(images/sketchy22.png) no-repeat top left transparent;
+    background: url(images/sketchy16.png) no-repeat top left transparent;
     }
 .caper-brush-sketchy {
-    background: url(images/ribbon22.png) no-repeat top left transparent;
+    background: url(images/ribbon16.png) no-repeat top left transparent;
     }
 .caper-brush-wavey {
-    background: url(images/smooth22.png) no-repeat top left transparent;
+    background: url(images/smooth16.png) no-repeat top left transparent;
     }
 .caper-dropdown .caper-brush-default {
     background: url(images/sketchy.png) no-repeat 1px 1px transparent;
@@ -99,13 +99,13 @@
     
     
 .caper-color-chalk {
-    background: url(images/chalk22.png) no-repeat top left #fff;
+    background: url(images/chalk16.png) no-repeat top left #fff;
     }
 .caper-color-chrome {
-    background: url(images/autumn22.png) no-repeat top left #fff;
+    background: url(images/autumn16.png) no-repeat top left #fff;
     }
 .caper-color-rainbow {
-    background: url(images/rainbow22.png) no-repeat top left #fff;
+    background: url(images/rainbow16.png) no-repeat top left #fff;
     }
 .caper-dropdown .caper-color-chalk {
     background: url(images/chalk.png) no-repeat 1px 1px transparent;
@@ -117,15 +117,18 @@
     background: url(images/rainbow.png) no-repeat 1px 1px transparent;
     }
 
+.caper-color-eraser {
+    background: url(images/eraser16.png) no-repeat top left #fff;
+    }
 
 .caper-size-1{
-    background: url(images/small22.png) no-repeat top left transparent;
+    background: url(images/small16.png) no-repeat top left transparent;
     }
 .caper-size-16{
-    background: url(images/medium22.png) no-repeat top left transparent;
+    background: url(images/medium16.png) no-repeat top left transparent;
     }
 .caper-size-32{
-    background: url(images/large22.png) no-repeat top left transparent;
+    background: url(images/large16.png) no-repeat top left transparent;
     }
 .caper-dropdown .caper-size-1{
     background: url(images/small.png) no-repeat 1px 1px transparent;

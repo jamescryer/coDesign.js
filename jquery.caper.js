@@ -3,13 +3,16 @@
     var drawClients = {},
         writeClients = {},
         defaults = {
-            color: '#000',
+			brushes: $.caper.brushes,
+			colors: $.caper.colors,
+            color: '#333',
             brushSize: 2,
             height: null,
             width: null,
             fullScreen: false,
             onDraw: function(){},
-            onWrite: function(){}
+            onWrite: function(){},
+			enableControls: true
         };
 
     $.fn.caper = function(opts, args){
@@ -58,7 +61,10 @@
                     textarea
                         .bind('keyup', _private.textareaKeyUp );
                     
-                    _private.enableControls();
+                    if(options.enableControls){
+						_private.enableControls();
+                    }
+					
                 },
                 
                 textareaKeyUp: function( event ){
@@ -242,6 +248,7 @@
                 .bind('mousedown', _private.mouseDown )
                 .bind('mousemove', _private.mouseMove );
         });
+
     };
 
 }(jQuery, CanvasDraw, CanvasWrite, CanvasControl));

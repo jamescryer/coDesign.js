@@ -27,15 +27,28 @@
 			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
 			context.fillStyle = this.color;
 			context.textBaseline = "middle";
+			context.globalAlpha = .9;
 		},
 
 		draw: function(text){
 			var context = this.canvas.getContext('2d'),
-				width = context.measureText(text).width;
+				width = context.measureText(text).width,
+				imageData;
+				
+			try {
+				imageData = context.getImageData(this.left, this.top-(this.fontSize/2), width, this.fontSize)	
+			} catch(e){}
 
+			this.lastCharacters.push({
+				top: this.top,
+				left: this.left,
+				height: this.fontSize,
+				width: width,
+				imageData: imageData
+				});
+			
 			context.fillText(text, this.left, this.top);
-
-			this.lastCharacters.push({top: this.top, left: this.left, height: this.fontSize, width: width})
+			
 			this.left += width; // move to next character position
 		},
 
@@ -47,7 +60,9 @@
 
 			_char = this.lastCharacters.pop();
 
-			context.clearRect(_char.left,_char.top-(_char.height/2), _char.width, _char.height);
+			try{
+				context.putImageData(_char.imageData, _char.left,_char.top-(_char.height/2));	
+			}catch(e){}
 
 			this.left -= _char.width;
 		},

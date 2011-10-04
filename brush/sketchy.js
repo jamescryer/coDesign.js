@@ -1,5 +1,5 @@
-window.brushes = window.brushes || {};
-window.brushes['sketchy'] = {
+$.caper.brushes = $.caper.brushes || {};
+$.caper.brushes['sketchy'] = {
     name: 'sketchy',
     len : 50,
 	randomizePoints: true,

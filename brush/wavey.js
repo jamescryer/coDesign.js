@@ -1,5 +1,5 @@
-window.brushes = window.brushes || {};
-window.brushes['wavey'] = {
+$.caper.brushes = $.caper.brushes || {};
+$.caper.brushes['wavey'] = {
     name: 'wavey',
     len : 50,
 	randomizePoints: false,
@@ -8,18 +8,7 @@ window.brushes['wavey'] = {
     randomizeSpin: false,
     spin: 45,
 	connectLines: true,
-	
-	/*size: {
-		wave: 10,
-		min: .1,
-		max: .5
-	},*/
-	
 	pressure: {
-		/*min: 2,
-		max: 3,
-		wave: .2,
-		randomize: false,*/
 		softness: .5
 	}
 };

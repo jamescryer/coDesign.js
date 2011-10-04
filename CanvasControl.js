@@ -7,8 +7,8 @@
 		+ 		'<button id="caper-selected-size" class="caper-size-<%=defaultSize%>"></button>'
 		+	'</span>'
 		+	'<span class="group">'
-		+ 		'<button id="caper-selected-color" class="caper-color-<%=defaultColor%>"></button>'
-		+ 		'<button id="caper-selected-gradient" class="disabled"></button>'
+		+ 		'<button id="caper-selected-color"></button>'
+		+ 		'<button id="caper-selected-gradient" class="caper-color-<%=defaultGradient%> disabled"></button>'
 		+ 		'<button data-name="eraser" id="eraser" class="caper-color-eraser last disabled"></button>'
 		+	'</span>'
 		+ 	'</div>'
@@ -48,6 +48,7 @@
 		this.sizes = options.sizes || [1,16,32];
 		this.$context = options.$context;
 		this.defaultColor = options.defaultColor || '#f00';
+		this.defaultGradient = options.defaultGradient || 'rainbow';
 
 		buildAndBind(this);
 	};
@@ -66,7 +67,7 @@
 			brushes: _.brushes,
 			colors: _.colors,
 			defaultBrush: _.brushes.default.name || '',
-			defaultColor: _.defaultColor.replace('#',''),
+			defaultGradient: _.defaultGradient,
 			defaultSize: 1,
 			sizes: _.sizes
 		});
@@ -77,6 +78,7 @@
 			_.$brushDropdown.hide();
 			_.$colorDropdown.hide();
 			_.$sizeDropdown.hide();
+			_.$gradientDropdown.hide();
 		});
 		
 		_.$brushDropdown = $('#caper-brushes');
@@ -91,10 +93,10 @@
 		_.$sizeDropdown = $('#caper-sizes');
 		_.$sizeButton = $('#caper-selected-size');
 		
-		bindDropdown(_.$brushDropdown, _.$brushButton);
-		bindDropdown(_.$colorDropdown, _.$colorButton);
-		bindDropdown(_.$gradientDropdown, _.$gradientButton);
-		bindDropdown(_.$sizeDropdown, _.$sizeButton);
+		bindDropdown(_.$brushDropdown, _.$brushButton, _);
+		bindDropdown(_.$colorDropdown, _.$colorButton, _);
+		bindDropdown(_.$gradientDropdown, _.$gradientButton, _);
+		bindDropdown(_.$sizeDropdown, _.$sizeButton, _);
 		
 		_.$colorPicker = $('#caper-color-picker');
 		
@@ -137,12 +139,17 @@
 			});
 	}
 	
-	function bindDropdown($dropdown, $button){
+	function bindDropdown($dropdown, $button, _){
 		$button.
 			bind('mouseup mousedown', function(e){e.stopPropagation();} ).
 			click(
 				function(e){
 					var pos = $button.position();
+					
+					if(_.$colorDropdown.get(0) !== $dropdown.get(0)) _.$colorDropdown.hide();
+					if(_.$gradientDropdown.get(0) !== $dropdown.get(0))_.$gradientDropdown.hide();
+					if(_.$brushDropdown.get(0) !== $dropdown.get(0))_.$brushDropdown.hide();
+					if(_.$sizeDropdown.get(0) !== $dropdown.get(0))_.$sizeDropdown.hide();
 					
 					$dropdown.
 						/*css({
@@ -152,7 +159,6 @@
 						toggle();
 
 					e.stopPropagation();
-
 				});
 	}
 	
