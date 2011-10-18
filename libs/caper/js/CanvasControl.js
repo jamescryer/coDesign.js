@@ -63,14 +63,15 @@
 	
 	function buildAndBind(_){
 
-		var htmlString = renderer({
-			brushes: _.brushes,
-			colors: _.colors,
-			defaultBrush: _.brushes.default.name || '',
-			defaultGradient: _.defaultGradient,
-			defaultSize: 1,
-			sizes: _.sizes
-		});
+		var defaultBrush = getDefault(_.brushes),
+			htmlString = renderer({
+				brushes: _.brushes,
+				colors: _.colors,
+				defaultBrush: defaultBrush.name,
+				defaultGradient: _.defaultGradient,
+				defaultSize: 1,
+				sizes: _.sizes
+			});
 		
 		var $control = $(htmlString).appendTo(_.$context);
 		
@@ -251,6 +252,15 @@
 		_.painter.updateBrush();
 	}
 	
+	
+	function getDefault(object){
+		var i;
+		for(i in object){
+			if(object.hasOwnProperty(i) && object[i].default){
+				return object[i];
+			}
+		}
+	}
 
 	// Simple JavaScript Templating
 	// John Resig - http://ejohn.org/ - MIT Licensed

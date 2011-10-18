@@ -9,11 +9,11 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
 	<title></title>
-	<meta name="description" content="Examples and documentation on grumble.js">
+	<meta name="description" content="Examples and documentation on caper.js">
 	<meta name="author" content="James Cryer">
 
-	<link href="jquery.caper.css" rel="stylesheet" type="text/css" />
 	<link href="libs/farbtastic/farbtastic.css" rel="stylesheet" type="text/css" />
+	<link href="libs/caper/css/jquery.caper.css" rel="stylesheet" type="text/css" />
 
 	<style>
 		body {
@@ -204,22 +204,19 @@ $('#caper').caper('write', everyThingItNeeds ); // trigger write event
 		</footer>
 	</div> <!-- eo #container -->
 
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.1/jquery.js"></script>	
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	
 	<script type="text/javascript" src="libs/farbtastic/farbtastic.js"></script>
 	
-	<script type="text/javascript" src="brush/default.js"></script>
-	
-	<script type="text/javascript" src="color/chrome.js"></script>
-	<script type="text/javascript" src="color/rainbow.js"></script>
-	<script type="text/javascript" src="color/chalk.js"></script>
-	
-	<script type="text/javascript" src="CanvasDraw.js"></script>
-	<script type="text/javascript" src="CanvasWrite.js"></script>
-	<script type="text/javascript" src="CanvasControl.js"></script>
-	<script type="text/javascript" src="jquery.caper.js"></script>
+	<script type="text/javascript" src="libs/caper/js/brushes.js"></script>
+	<script type="text/javascript" src="libs/caper/js/colors.js"></script>
+	<script type="text/javascript" src="libs/caper/js/CanvasDraw.js"></script>
+	<script type="text/javascript" src="libs/caper/js/CanvasWrite.js"></script>
+	<script type="text/javascript" src="libs/caper/js/CanvasControl.js"></script>
+	<script type="text/javascript" src="libs/caper/js/jquery.caper.js"></script>
 	
 	<script>
-		$('#rainbow').caper();
+		$('#caper').caper();
 	</script>
 	
 </body>

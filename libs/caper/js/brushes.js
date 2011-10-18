@@ -1,8 +1,8 @@
 $.caper = $.caper || {};
 $.caper.brushes = $.caper.brushes || {};
 
-$.caper.brushes['default'] = {
-    name: 'default',
+$.caper.brushes['webby'] = {
+    name: 'webby',
     len : 20,
 	randomizePoints: true,
     points : 10,
@@ -47,12 +47,13 @@ $.caper.brushes['sketchy'] = {
 	}
 };
 
-$.caper.brushes['wavey'] = {
-    name: 'wavey',
-    len : 50,
+$.caper.brushes['solid'] = {
+    name: 'solid',
+	default: true,
+    len : 1,
 	randomizePoints: false,
-    points : 50,
-    layers : 50,
+    points : 30,
+    layers : 30,
     randomizeSpin: false,
     spin: 45,
 	connectLines: true,
