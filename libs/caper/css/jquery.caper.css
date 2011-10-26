@@ -74,8 +74,31 @@
         border: 1px solid #555;
         top:0;
         left:0;
-        width: 200px;
         }
+    .caper-left-col, .caper-right-col {
+        float: left;
+        padding: 8px;
+        }
+        .caper-left-col {
+            padding-right: 48px;
+        }
+        .caper-right-col {
+            padding-top: 48px;
+            }
+        .caper-right-col:after {
+            content: ".";
+            display: block;
+            height: 0;
+            clear: both;
+            visibility: hidden;
+            }
+        .caper-middle-text {
+            color: #fff;
+            font-size: 14px;
+            left: 224px;
+            position: absolute;
+            top: 112px;
+            }
     
 .caper-brush-webby {
     background: url(../images/sketchy16.png) no-repeat top left transparent;
@@ -95,8 +118,6 @@
 .caper-dropdown .caper-brush-solid {
     background: url(../images/smooth.png) no-repeat 1px 1px transparent;
     }
-    
-    
     
 .caper-color-chalk {
     background: url(../images/chalk16.png) no-repeat top left #fff;

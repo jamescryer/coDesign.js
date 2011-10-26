@@ -35,9 +35,9 @@
             width       = options.width || $this.width();
             height      = options.fullScreen ? $(window).height() : (options.height || $this.height());
 
-            canvas      = $('<canvas width="'+width+'" height="'+height+'" />').prependTo($this);
+            canvas      = $('<canvas style="position:absolute; background:#fff" width="'+width+'" height="'+height+'" />').appendTo($this);
             
-            position    = $this.offset();
+            position    = $this.position();
 
             _private = {
                 
@@ -55,8 +55,7 @@
                         color: options.color
                     });
         
-                    textarea = $('<textarea style="position: absolute; left: -10px; top: -10px; height:0px; width: 0px;"></textarea>')
-                        .prependTo(document.body);
+                    textarea = $('<textarea style="position:absolute;"></textarea>').prependTo($this);
         
                     textarea
                         .bind('keyup', _private.textareaKeyUp );
@@ -109,8 +108,8 @@
 
                 mouseUp: function( event ){
                     
-                    var top = event.clientY - position.top - document.body.scrollTop,
-                        left = event.clientX - position.left - document.body.scrollLeft;
+                    var top = event.clientY + window.pageYOffset - position.top,
+                        left = event.clientX + window.pageXOffset - position.left;
 
                     textRenderer
                         .begin({
@@ -138,6 +137,10 @@
                 },
                 
                 mouseDown: function( event ){
+					
+					var x = event.clientX + window.pageXOffset - position.left,
+						y = event.clientY + window.pageYOffset - position.top;
+					
                     rainbow.begin();
 
                     options.onDraw({
@@ -148,8 +151,8 @@
                     timer = setInterval(function(){
                         rainbow
                             .draw({
-                                x: event.clientX - position.left - document.body.scrollLeft,
-                                y: event.clientY - position.top - document.body.scrollTop
+                                x: x,
+                                y: y
                             });
 
                         if(rainbow.brush && rainbow.color){
@@ -157,19 +160,23 @@
                                 'action': 'incomplete',
                                 'brush': rainbow.brush,
                                 'color': rainbow.color,
-                                'x': event.clientX - position.left - document.body.scrollLeft,
-                                'y': event.clientY - position.top - document.body.scrollTop
+                                'x': x,
+                                'y': y
                             });
                         }
 
-                    },75);
+                    },100);
                 },
                 
                 mouseMove: function( event ){
+					
+					var x = event.clientX + window.pageXOffset - position.left,
+						y = event.clientY + window.pageYOffset - position.top;
+					
                     clearInterval(timer);
                     rainbow.draw({
-                        x: event.clientX - position.left - document.body.scrollLeft,
-                        y: event.clientY - position.top - document.body.scrollTop
+                        x: x,
+                        y: y
                     });
 
                     if(rainbow.isActive && rainbow.brush && rainbow.color){
@@ -177,8 +184,8 @@
                             'action': 'incomplete',
                             'brush': rainbow.brush,
                             'color': rainbow.color,
-                            'x': event.clientX - position.left - document.body.scrollLeft,
-                            'y': event.clientY - position.top - document.body.scrollTop
+                            'x': x,
+                            'y': y
                         });
                     }
                 },
