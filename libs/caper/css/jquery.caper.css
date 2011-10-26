@@ -1,4 +1,14 @@
 
+.caper-canvas{
+    position: absolute;
+    background: #fff;
+    cursor: pointer;
+    }
+    .caper-canvas:focus,
+    .caper-canvas:active{
+        cursor: crosshair;
+        }
+
 .caper-control{
     border-radius: 0px 3px 3px 3px;
     -moz-border-radius: 0px 3px 3px 3px;
@@ -10,7 +20,6 @@
     top:0;
     left:0;
     float:left;
-    width:200px;
     }
     .caper-dropdown button,
     .caper-control button {

@@ -5,7 +5,7 @@
         defaults = {
 			brushes: $.caper.brushes,
 			colors: $.caper.colors,
-            color: '#333',
+            color: '#b33',
             brushSize: 2,
             height: null,
             width: null,
@@ -20,7 +20,7 @@
         this.each(function(){
             
             var $this = $(this),
-                options, width, height, canvas, position, timer, rainbow, textRenderer, textarea, _private;
+                options, width, height, canvas, position, timer, rainbow, textRenderer, textarea, defaultBrush, _private;
 
             if(typeof opts === 'string'){
                 $this.trigger({
@@ -35,19 +35,23 @@
             width       = options.width || $this.width();
             height      = options.fullScreen ? $(window).height() : (options.height || $this.height());
 
-            canvas      = $('<canvas style="position:absolute; background:#fff" width="'+width+'" height="'+height+'" />').appendTo($this);
+            canvas      = $('<canvas class="caper-canvas" width="'+width+'" height="'+height+'" />').appendTo($this);
             
             position    = $this.position();
+			
+			defaultBrush = getDefault(options.brushes);
 
             _private = {
                 
                 init: function(){
                     
+					canvas.mousedown(function(e){e.preventDefault();});
+					
                     rainbow = new CanvasDraw( {
                         canvas: canvas.get(0),
                         color  : options.color,
                         size  : options.brushSize,
-                        brush : $.extend({},options.brushes.default) || {} // use extend to create copy / dont use object reference
+                        brush : $.extend({}, defaultBrush ) || {} // use extend to create copy / dont use object reference
                     });
         
                     textRenderer = new CanvasWrite({
@@ -101,7 +105,8 @@
                         painter: rainbow,
                         writer: textRenderer,
                         $context: $this,
-                        defaultColor: options.color
+                        defaultColor: options.color,
+						defaultBrush: defaultBrush
                     });
                     
                 },
@@ -257,5 +262,14 @@
         });
 
     };
+
+	function getDefault(object){
+		var i;
+		for(i in object){
+			if(object.hasOwnProperty(i) && object[i]['default']){
+				return object[i];
+			}
+		}
+	}
 
 }(jQuery, CanvasDraw, CanvasWrite, CanvasControl));

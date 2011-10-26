@@ -261,20 +261,21 @@
 				drawMethod: function(i, xx, yy){
 
 						var connectWithPrevious = brush.connectLines !== false;
+						var xy = {};
 
 						if(brush.pressure.randomize){
-								context.lineWidth = Math.floor(Math.random() * (brush.lineWidth+1));
+							context.lineWidth = Math.floor(Math.random() * (brush.lineWidth+1));
 						}
-						
-						context.beginPath();
-						
+
 						if(!_.points[layers]) _.points[layers] = [];
 						
 						if( !_.points[layers][i] || !connectWithPrevious){
-							context.moveTo( xx-1, yy-1 );
+							xy.x = xx-1;
+							xy.y = yy-1;
 						}
 						else {
-							context.moveTo(_.points[layers][i].x, _.points[layers][i].y);
+							xy.x = _.points[layers][i].x;
+							xy.y =  _.points[layers][i].y;
 						}
 						
 						_.points[layers][i] = {
@@ -282,8 +283,12 @@
 							y: yy
 						};
 						
-						context.lineTo(xx, yy);
-						context.stroke();								
+						setTimeout(function(){ // defer in thread to allow other processes to continue
+							context.beginPath();
+							context.moveTo( xy.x, xy.y );
+							context.lineTo(xx, yy);
+							context.stroke();
+						},1);
 				}
 			});
 
@@ -311,7 +316,7 @@
 			spinSin 	= Math.sin(spinRadians),
 			spinCos 	= Math.cos(spinRadians),
 			xx 		= centerX + spinCos * radiusX,
-			yy 		= centerY + spinSin * radiusX;
+			yy 		= centerY + spinSin * radiusY;
 
 		for (i=1; i<=steps; i++) {
 			radian = i/steps * 2 * Math.PI;

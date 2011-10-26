@@ -49,7 +49,7 @@ $.caper.brushes['sketchy'] = {
 
 $.caper.brushes['solid'] = {
     name: 'solid',
-	default: true,
+	'default': true,
     len : 1,
 	randomizePoints: false,
     points : 30,

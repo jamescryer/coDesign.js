@@ -3,39 +3,34 @@
 	var view = ''
 		+ '<div class="caper-control">'
 		+ 	'<button id="caper-selected-brush" title="Select a brush" class="caper-brush-<%=defaultBrush%>"></button>'
-		+	'<span class="group">'
-		+ 		'<button id="caper-selected-size" title="Choose a brush size" class="caper-size-<%=defaultSize%>"></button>'
-		+	'</span>'
-		+	'<span class="group">'
-		+ 		'<button id="caper-selected-color" title="What color would you like?"></button>'
-		+ 		'<button data-name="eraser" id="eraser" title="Click to use eraser" class="caper-color-eraser last disabled"></button>'
-		+	'</span>'
-		+ 	'</div>'
-		+ 	'<div class="caper-dropdown" id="caper-brushes" style="display:none">'
-		+ 		'<% for (var i in brushes) { %>'
-		+ 			'<% if(brushes.hasOwnProperty(i)) { %>'
-		+				'<button data-name="<%=i%>" class="caper-brush-<%=i%>"><%=i%></button>'
+		+ 	'<button id="caper-selected-size" title="Choose a brush size" class="caper-size-<%=defaultSize%>"></button>'
+		+ 	'<button id="caper-selected-color" title="What color would you like?"></button>'
+		+ 	'<button data-name="eraser" id="eraser" title="Click to use eraser" class="caper-color-eraser last disabled"></button>'
+		+ '</div>'
+		+ '<div class="caper-dropdown" id="caper-brushes" style="display:none">'
+		+ 	'<% for (var i in brushes) { %>'
+		+ 		'<% if(brushes.hasOwnProperty(i)) { %>'
+		+			'<button data-name="<%=i%>" class="caper-brush-<%=i%>"><%=i%></button>'
+		+ 		'<%} %>'
+		+ 	'<%} %>'
+		+ '</div>'
+		+ '<div class="caper-dropdown" id="caper-colors" style="display:none">'
+		+	'<div class="caper-left-col">'
+		+		'<div id="caper-color-picker"></div>'
+		+		'<span class="caper-middle-text">or</span>'
+		+	'</div>'
+		+	'<div class="caper-right-col">'
+		+ 		'<% for (var i in colors) { %>'
+		+ 			'<% if(colors.hasOwnProperty(i)) { %>'
+		+				'<button data-name="<%=i%>" class="caper-color-<%=i%>"><%=i%></button>'
 		+ 			'<%} %>'
 		+ 		'<%} %>'
-		+ 	'</div>'
-		+ 	'<div class="caper-dropdown" id="caper-colors" style="display:none">'
-		+		'<div class="caper-left-col">'
-		+			'<div id="caper-color-picker"></div>'
-		+			'<span class="caper-middle-text">or</span>'
-		+		'</div>'
-		+		'<div class="caper-right-col">'
-		+ 			'<% for (var i in colors) { %>'
-		+ 				'<% if(colors.hasOwnProperty(i)) { %>'
-		+					'<button data-name="<%=i%>" class="caper-color-<%=i%>"><%=i%></button>'
-		+ 				'<%} %>'
-		+ 			'<%} %>'
-		+		'</div>'
-		+ 	'</div>'
-		+ 	'<div class="caper-dropdown" id="caper-sizes" style="display:none">'
-		+			'<button data-value="1" class="caper-size-1">small</button>'
-		+			'<button data-value="16" class="caper-size-16">medium</button>'
-		+			'<button data-value="32" class="last caper-size-32">large</button>'
-		+ 	'</div>'
+		+	'</div>'
+		+ '</div>'
+		+ '<div class="caper-dropdown" id="caper-sizes" style="display:none">'
+		+	'<button data-value="1" class="caper-size-1">small</button>'
+		+		'<button data-value="16" class="caper-size-16">medium</button>'
+		+		'<button data-value="32" class="last caper-size-32">large</button>'
 		+ '</div>';
 		
 	var renderer = tmpl(view);
@@ -48,7 +43,8 @@
 		this.colors = options.colors || {};
 		this.sizes = options.sizes || [1,16,32];
 		this.$context = options.$context;
-		this.defaultColor = options.defaultColor || '#f00';
+		this.defaultColor = options.defaultColor || '#900';
+		this.defaultBrush = options.defaultBrush || {};
 
 		buildAndBind(this);
 	};
@@ -63,11 +59,10 @@
 	
 	function buildAndBind(_){
 
-		var defaultBrush = getDefault(_.brushes),
-			htmlString = renderer({
+		var htmlString = renderer({
 				brushes: _.brushes,
 				colors: _.colors,
-				defaultBrush: defaultBrush.name,
+				defaultBrush: _.defaultBrush.name,
 				defaultSize: 1,
 				sizes: _.sizes
 			});
@@ -120,6 +115,7 @@
 			});
 		
 		_.$eraseButton = $('#eraser').
+			tipsy({gravity: 'sw'}).
 			mousedown(function(){
 				
 				if(_.$eraseButton.hasClass('disabled')){
@@ -260,16 +256,6 @@
 		_.painter.updateBrush();
 	}
 	
-	
-	function getDefault(object){
-		var i;
-		for(i in object){
-			if(object.hasOwnProperty(i) && object[i].default){
-				return object[i];
-			}
-		}
-	}
-
 	// Simple JavaScript Templating
 	// John Resig - http://ejohn.org/ - MIT Licensed
 	var cache = {};
