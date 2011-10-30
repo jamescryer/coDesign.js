@@ -4,7 +4,7 @@
 
 	window.CanvasDraw = function( options ){
 		var _=this;
-		
+				
 		_.id = id++;
 		_.canvas = options.canvas;
 		_.size = options.size;
@@ -216,7 +216,7 @@
 				radiusOpts: radiusOpts,
 				pressure: pressure,
 				connectLines: o.connectLines,
-				randomiseSpin: o.randomiseSpin,
+				randomizeSpin: o.randomizeSpin,
 				randomizePoints: o.randomizePoints
 			});
 		}
@@ -244,9 +244,9 @@
 		context.lineWidth = brush.lineWidth;
 		context.strokeStyle = typeof command.color === 'string'
 					? command.color
-					: "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+command.color.a+")";
+					: "rgba("+command.color.r+","+command.color.g+","+command.color.b+","+(brush.pressure.softness || 1)+")";
 
-		context.globalAlpha = brush.pressure.softness || 1;
+		context.beginPath();
 
 		do{
 
@@ -260,35 +260,31 @@
 				layers:layers,
 				drawMethod: function(i, xx, yy){
 
-						var connectWithPrevious = brush.connectLines !== false;
-						var xy = {};
+					var connectWithPrevious = brush.connectLines !== false;
+					var xy = {};
 
-						if(brush.pressure.randomize){
-							context.lineWidth = Math.floor(Math.random() * (brush.lineWidth+1));
-						}
+					if(brush.pressure.randomize){
+						context.lineWidth = Math.floor(Math.random() * (brush.lineWidth+1));
+					}
 
-						if(!_.points[layers]) _.points[layers] = [];
-						
-						if( !_.points[layers][i] || !connectWithPrevious){
-							xy.x = xx-1;
-							xy.y = yy-1;
-						}
-						else {
-							xy.x = _.points[layers][i].x;
-							xy.y =  _.points[layers][i].y;
-						}
-						
-						_.points[layers][i] = {
-							x: xx,
-							y: yy
-						};
-						
-						setTimeout(function(){ // defer in thread to allow other processes to continue
-							context.beginPath();
-							context.moveTo( xy.x, xy.y );
-							context.lineTo(xx, yy);
-							context.stroke();
-						},1);
+					if(!_.points[layers]) _.points[layers] = [];
+					
+					if( !_.points[layers][i] || !connectWithPrevious){
+						xy.x = xx-1;
+						xy.y = yy-1;
+					}
+					else {
+						xy.x = _.points[layers][i].x;
+						xy.y =  _.points[layers][i].y;
+					}
+					
+					_.points[layers][i] = {
+						x: xx,
+						y: yy
+					};
+					
+					context.moveTo( xy.x, xy.y );
+					context.lineTo(xx, yy);
 				}
 			});
 
@@ -296,6 +292,8 @@
 			layers--;
 
 		} while(layers)
+
+		context.stroke();
 
 	};
 

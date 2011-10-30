@@ -37,6 +37,11 @@
 
             canvas      = $('<canvas class="caper-canvas" width="'+width+'" height="'+height+'" />').appendTo($this);
             
+			if(!canvas.get(0).getContext || !canvas.get(0).getContext("2d")){
+				alert('caper.js will not work for you.  Your browser does not support HTML5 canvas.  Please consider upgrading your browser.');
+				return false;
+		   }
+			
             position    = $this.position();
 			
 			defaultBrush = getDefault(options.brushes);
@@ -44,7 +49,11 @@
             _private = {
                 
                 init: function(){
-                    
+					
+					var context = canvas.get(0).getContext("2d");
+					context.fillStyle = '#fff';
+					context.fillRect(0,0,width,height);
+					
 					canvas.mousedown(function(e){e.preventDefault();});
 					
                     rainbow = new CanvasDraw( {
@@ -100,6 +109,7 @@
                 enableControls: function(){
                     
                     new CanvasControl({
+						canvas:canvas.get(0),
                         brushes: options.brushes,
                         colors: options.colors,
                         painter: rainbow,
@@ -175,10 +185,13 @@
                 
                 mouseMove: function( event ){
 					
+					if(!rainbow.isActive) return;
+					
 					var x = event.clientX + window.pageXOffset - position.left,
 						y = event.clientY + window.pageYOffset - position.top;
 					
                     clearInterval(timer);
+					
                     rainbow.draw({
                         x: x,
                         y: y
@@ -253,12 +266,33 @@
 
             _private.init();
             
-            return $this
-                .bind('mouseup', _private.mouseUp )
-                .bind('paint.rainbow', _private.paint )
-                .bind('write.rainbow', _private.write )
-                .bind('mousedown', _private.mouseDown )
-                .bind('mousemove', _private.mouseMove );
+			var mousedownistrue;
+			
+			$(document.body).
+				bind('mousedown',function(){
+					mousedownistrue = true;
+				}).
+				bind('mouseup', function(){
+					mousedownistrue	 = false;
+				});
+			
+			canvas.
+				bind('mouseleave', function(event){
+					_private.mouseUp(event);
+				}).
+				bind('mouseenter', function(event){
+					// tabName check is a bit of hack
+					if(mousedownistrue && event.fromElement.tagName !== 'BUTTON') {
+						_private.mouseDown(event);
+					}
+				}).
+				bind('mouseup', _private.mouseUp ).
+                bind('mousedown', _private.mouseDown ).
+                bind('mousemove', _private.mouseMove );
+			
+            return $this.
+                bind('paint.rainbow', _private.paint ).
+                bind('write.rainbow', _private.write );
         });
 
     };

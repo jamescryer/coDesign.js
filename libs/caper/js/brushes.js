@@ -28,14 +28,14 @@ $.caper.brushes['sketchy'] = {
 	randomizePoints: true,
     points : 2,
     layers : 20,
-    randomizeSpin: true,
+    randomizeSpin: false,
     spin: 45,
 	connectLines: true,
 	
 	size: {
 		wave: .9,
 		min: .1,
-		max: 3
+		max: 2
 	},
 	
 	pressure: {
@@ -47,17 +47,30 @@ $.caper.brushes['sketchy'] = {
 	}
 };
 
+$.caper.brushes['spray'] = {
+    name: 'spray',
+	'default': false,
+    len : 10,
+	randomizePoints: true,
+    randomizeSpin: true,
+    spin: 360,
+    points : 5,
+    layers : 70,
+	connectLines: false,
+	pressure: {
+		softness: 0
+	}
+};
+
 $.caper.brushes['solid'] = {
     name: 'solid',
 	'default': true,
-    len : 1,
+    len : 10,
 	randomizePoints: false,
-    points : 30,
-    layers : 30,
-    randomizeSpin: false,
-    spin: 45,
+    points : 70,
+    layers : 10,
 	connectLines: true,
 	pressure: {
-		softness: .5
+		softness: 0
 	}
 };

@@ -9,7 +9,6 @@ $.caper.colors['chalk'] = {
     phaseR : .1,
     phaseG : .1,
     phaseB : .1,
-    alpha : .5,
     center : 127,
     width : 80,
     len : 50
@@ -23,7 +22,6 @@ $.caper.colors['chrome'] = {
     phaseR : 0,
     phaseG : 1,
     phaseB : 2,
-    alpha : .8,
     center : 80,
     width : 127,
     len : 50
@@ -37,7 +35,6 @@ $.caper.colors['rainbow'] = {
     phaseR : 0,
     phaseG : 2,
     phaseB : 4,
-    alpha : .5,
     center : 128,
     width : 127,
     len : 50

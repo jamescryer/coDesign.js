@@ -84,6 +84,11 @@
         top:0;
         left:0;
         }
+    .caper-modal {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        }
     .caper-left-col, .caper-right-col {
         float: left;
         padding: 8px;
@@ -115,6 +120,9 @@
 .caper-brush-sketchy {
     background: url(../images/ribbon16.png) no-repeat top left transparent;
     }
+.caper-brush-spray {
+    background: url(../images/spray16.png) no-repeat top left transparent;
+    }
 .caper-brush-solid {
     background: url(../images/smooth16.png) no-repeat top left transparent;
     }
@@ -123,6 +131,9 @@
     }
 .caper-dropdown .caper-brush-sketchy {
     background: url(../images/ribbon.png) no-repeat 1px 1px transparent;
+    }
+.caper-dropdown .caper-brush-spray {
+    background: url(../images/spray.png) no-repeat 1px 1px transparent;
     }
 .caper-dropdown .caper-brush-solid {
     background: url(../images/smooth.png) no-repeat 1px 1px transparent;
@@ -147,8 +158,11 @@
     background: url(../images/rainbow.png) no-repeat 1px 1px transparent;
     }
 
-.caper-color-eraser {
+.caper-eraser {
     background: url(../images/eraser16.png) no-repeat top left #fff;
+    }
+.caper-save {
+    background: url(../images/savetoimage16.png) no-repeat top left #fff;
     }
 
 .caper-size-1{

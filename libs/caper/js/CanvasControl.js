@@ -1,11 +1,13 @@
 (function ($) {
 	
 	var view = ''
+		+ '<div class="caper-modal" id="caper-modal" style="display:none;"></div>'
 		+ '<div class="caper-control">'
 		+ 	'<button id="caper-selected-brush" title="Select a brush" class="caper-brush-<%=defaultBrush%>"></button>'
 		+ 	'<button id="caper-selected-size" title="Choose a brush size" class="caper-size-<%=defaultSize%>"></button>'
 		+ 	'<button id="caper-selected-color" title="What color would you like?"></button>'
-		+ 	'<button data-name="eraser" id="eraser" title="Click to use eraser" class="caper-color-eraser last disabled"></button>'
+		+ 	'<button data-name="eraser" id="eraser" title="Click to use eraser" class="caper-eraser disabled"></button>'
+		+ 	'<button data-name="save" id="save" title="Open in new window as image" class="caper-save last"></button>'
 		+ '</div>'
 		+ '<div class="caper-dropdown" id="caper-brushes" style="display:none">'
 		+ 	'<% for (var i in brushes) { %>'
@@ -43,6 +45,7 @@
 		this.colors = options.colors || {};
 		this.sizes = options.sizes || [1,16,32];
 		this.$context = options.$context;
+		this.canvas = options.canvas;
 		this.defaultColor = options.defaultColor || '#900';
 		this.defaultBrush = options.defaultBrush || {};
 
@@ -73,7 +76,11 @@
 			_.$brushDropdown.hide();
 			_.$colorDropdown.hide();
 			_.$sizeDropdown.hide();
+			
+			_.$modal.hide();	
 		});
+		
+		_.$modal = $('#caper-modal');
 		
 		_.$brushDropdown = $('#caper-brushes');
 		_.$brushButton = $('#caper-selected-brush');
@@ -115,7 +122,7 @@
 			});
 		
 		_.$eraseButton = $('#eraser').
-			tipsy({gravity: 'sw'}).
+			tipsy({gravity: 'nw'}).
 			mousedown(function(){
 				
 				if(_.$eraseButton.hasClass('disabled')){
@@ -127,6 +134,16 @@
 				}
 			});
 		
+		_.$saveButton = $('#save').
+			tipsy({gravity: 'nw'}).
+			mousedown(function(){
+				var data = _.canvas.toDataURL("image/jpg");
+				//window.open(_.canvas.toDataURL("image/jpeg")); // this doesn't work in IE9.  see. http://msdn.microsoft.com/en-us/library/cc848897%28VS.85%29.aspx
+				var image = $('<img src="'+data+'" />').appendTo(document.body).get(0);
+							
+				//window.open(image.get(0).src);
+			});
+		
 		_.$sizeDropdown.
 			find('button').
 			mousedown(function(){
@@ -136,22 +153,23 @@
 	
 	function bindDropdown($dropdown, $button, _){
 		$button.
-			tipsy({gravity: 'sw'}).
+			tipsy({gravity: 'nw'}).
 			bind('mouseup mousedown', function(e){e.stopPropagation();} ).
 			click(
 				function(e){
 					var pos = $button.position();
 					
 					if(_.$colorDropdown.get(0) !== $dropdown.get(0)) _.$colorDropdown.hide();
-					if(_.$brushDropdown.get(0) !== $dropdown.get(0))_.$brushDropdown.hide();
-					if(_.$sizeDropdown.get(0) !== $dropdown.get(0))_.$sizeDropdown.hide();
+					if(_.$brushDropdown.get(0) !== $dropdown.get(0)) _.$brushDropdown.hide();
+					if(_.$sizeDropdown.get(0) !== $dropdown.get(0)) _.$sizeDropdown.hide();
 					
-					$dropdown.
-						/*css({
-							top: pos.top + ($button.outerHeight()/1.5),
-							left: pos.left + ($button.outerWidth()/1.5)
-						}).*/
-						toggle();
+					if($dropdown.css('display') === 'block'){
+						_.$modal.hide();	
+					} else {
+						_.$modal.show();	
+					}
+					
+					$dropdown.toggle();
 
 					e.stopPropagation();
 				});
