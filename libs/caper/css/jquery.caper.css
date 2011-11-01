@@ -21,7 +21,7 @@
     left:0;
     float:left;
     }
-    .caper-dropdown button,
+    .caper-dropdown .button,
     .caper-control button {
         border-radius: 3px;
         -moz-border-radius: 3px;
@@ -36,7 +36,7 @@
         color: #555;
         font-size: 10px;
         }
-        .caper-dropdown button{
+        .caper-dropdown .button{
             background-color: transparent;
             color: #FFFFFF;
             display: block;
@@ -50,21 +50,20 @@
             text-align: left;
             width: 100%;
             }
-            .caper-dropdown button:last-child{
+            .caper-dropdown .button:last-child{
                 margin-bottom: 0px;
                 }
-        .caper-dropdown button:last-child,
+        .caper-dropdown .button:last-child,
         .caper-control button:last-child {
-            margin-right:0;
+            margin-right: 0;
             }
         .caper-control button.disabled{
             opacity: .3;    
             }
-        .caper-dropdown button.active,
         .caper-control button.active {
             border-color: #888;
             }
-        .caper-dropdown button:hover,
+        .caper-dropdown .button:hover,
         .caper-control button:hover {
             border-color: #aaa;
             }
@@ -84,6 +83,36 @@
         top:0;
         left:0;
         }
+        .caper-image {
+            text-align: center;
+            padding: 8px;
+            }
+            .caper-image img {
+                width: 250px;
+                }
+            .caper-save-message {
+                color: white;
+                margin: 0;
+                padding: 0 8px 8px 8px;
+                text-align: center;
+                width: 250px;
+                }
+            .caper-dropdown .caper-save-okay-button {
+                border-radius: 3px;
+                -moz-border-radius: 3px;
+                background-color: transparent;
+                color: #FFF;
+                display: block;
+                font-size: 11px;
+                height: 36px;
+                border: 1px solid #aaa;
+                text-align: left;
+                float: right;
+                margin: 8px;
+                padding: 0 8px;
+                width: auto;
+                cursor: pointer;
+                }
     .caper-modal {
         position: absolute;
         height: 100%;

@@ -65,12 +65,8 @@
 				_.colors = null;
 			} else {
 				_.colorOptions = options || {};
-				_.colors = _makeColorGradient(_.colorOptions);
-				_.colorsLength = _.colors.length;
+				_.colors = new ColorArray(_.colorOptions);
 			}
-
-			_.colorCyclePos = 0;
-			_.colorReverse = false;
 		},
 
 		updateBrush: function(options){
@@ -93,30 +89,10 @@
 	// private methods
 
 	function _getColor(_){
-		var i;
-
 		if(!_.colors){
 			return _.color;
 		}
-
-		if( _.colorReverse ){
-			if (_.colorCyclePos === 0 ){
-				i = 1;
-				_.colorReverse = false;
-			} else {
-				i = -1;
-				_.colorReverse = true;
-			}
-		} else {
-			if(_.colorCyclePos === _.colorsLength){
-				i = -1;
-				_.colorReverse = true;
-			} else{
-				i = 1;
-				_.colorReverse = false;
-			}
-		}
-		return _.colors[_.colorCyclePos+=i];
+		return _.colors.next();
 	}
 
 	function _getBrush(_){
@@ -139,39 +115,6 @@
 			}
 		}
 		return _.brushes[_.brushCyclePos+=i];
-	}
-
-	function _makeColorGradient( o ){
-
-		// adapted from: http://www.krazydad.com/makecolors.php
-
-		var frequencyR 	= o.frequencyR || .1,
-			frequencyG	= o.frequencyG || .1,
-			frequencyB	= o.frequencyB || .1,
-			phaseR		= o.phaseR || .1,
-			phaseG		= o.phaseG || .1,
-			phaseB		= o.phaseB || .1,
-			alpha		= o.alpha || .3,
-			center		= o.center || 200,
-			width		= o.width || /*127*/100,
-			len			= o.len || 50,
-			rainbow 	= [],
-
-			red, grn, blu, i;
-
-		for (i = 0; ++i < len;){
-			red = Math.sin(frequencyR*i + phaseR) * width + center;
-			grn = Math.sin(frequencyG*i + phaseG) * width + center;
-			blu = Math.sin(frequencyB*i + phaseB) * width + center;
-			rainbow.push({
-				r: Math.floor(red),
-				g: Math.floor(grn),
-				b: Math.floor(blu),
-				a: alpha
-			});
-		}
-
-		return rainbow;
 	}
 
 	function _makeBrushGradient(o, size){ // for waveyness

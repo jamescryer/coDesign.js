@@ -6,13 +6,13 @@
 		+ 	'<button id="caper-selected-brush" title="Select a brush" class="caper-brush-<%=defaultBrush%>"></button>'
 		+ 	'<button id="caper-selected-size" title="Choose a brush size" class="caper-size-<%=defaultSize%>"></button>'
 		+ 	'<button id="caper-selected-color" title="What color would you like?"></button>'
-		+ 	'<button data-name="eraser" id="eraser" title="Click to use eraser" class="caper-eraser disabled"></button>'
-		+ 	'<button data-name="save" id="save" title="Open in new window as image" class="caper-save last"></button>'
+		+ 	'<button data-name="eraser" id="caper-eraser" title="Click to use eraser" class="caper-eraser disabled"></button>'
+		+ 	'<button data-name="save" id="caper-save-button" title="Open in new window as image" class="caper-save last"></button>'
 		+ '</div>'
 		+ '<div class="caper-dropdown" id="caper-brushes" style="display:none">'
 		+ 	'<% for (var i in brushes) { %>'
 		+ 		'<% if(brushes.hasOwnProperty(i)) { %>'
-		+			'<button data-name="<%=i%>" class="caper-brush-<%=i%>"><%=i%></button>'
+		+			'<button data-name="<%=i%>" class="button caper-brush-<%=i%>"><%=i%></button>'
 		+ 		'<%} %>'
 		+ 	'<%} %>'
 		+ '</div>'
@@ -24,15 +24,22 @@
 		+	'<div class="caper-right-col">'
 		+ 		'<% for (var i in colors) { %>'
 		+ 			'<% if(colors.hasOwnProperty(i)) { %>'
-		+				'<button data-name="<%=i%>" class="caper-color-<%=i%>"><%=i%></button>'
+		+				'<button data-name="<%=i%>" class="button caper-color-<%=i%>"><%=i%></button>'
 		+ 			'<%} %>'
 		+ 		'<%} %>'
 		+	'</div>'
 		+ '</div>'
 		+ '<div class="caper-dropdown" id="caper-sizes" style="display:none">'
-		+	'<button data-value="1" class="caper-size-1">small</button>'
-		+		'<button data-value="16" class="caper-size-16">medium</button>'
-		+		'<button data-value="32" class="last caper-size-32">large</button>'
+		+	'<button data-value="1" class="button caper-size-1">small</button>'
+		+	'<button data-value="16" class="button caper-size-16">medium</button>'
+		+	'<button data-value="32" class="button last caper-size-32">large</button>'
+		+ '</div>'
+		+ '<div class="caper-dropdown" id="caper-save" style="display:none">'
+		+	'<div class="caper-image">'
+		+		'<img src="" id="caper-image" />'
+		+	'</div>'
+		+	'<p class="caper-save-message">To save, right click on the above image, and then select "Save Image As".</p>'
+		+	'<button class="caper-save-okay-button">Okay, I\'m done</button>'
 		+ '</div>';
 		
 	var renderer = tmpl(view);
@@ -76,6 +83,7 @@
 			_.$brushDropdown.hide();
 			_.$colorDropdown.hide();
 			_.$sizeDropdown.hide();
+			_.$saveDropdown.hide();
 			
 			_.$modal.hide();	
 		});
@@ -91,9 +99,15 @@
 		_.$sizeDropdown = $('#caper-sizes');
 		_.$sizeButton = $('#caper-selected-size');
 		
+		_.$saveDropdown = $('#caper-save');
+		_.$saveButton = $('#caper-save-button');
+		
+		_.$image = $('#caper-image');
+		
 		bindDropdown(_.$brushDropdown, _.$brushButton, _);
 		bindDropdown(_.$colorDropdown, _.$colorButton, _);
 		bindDropdown(_.$sizeDropdown, _.$sizeButton, _);
+		bindDropdown(_.$saveDropdown, _.$saveButton, _);
 		
 		_.$colorPicker = $('#caper-color-picker');
 		
@@ -121,7 +135,7 @@
 				selectBrush(_, $control, $(this));
 			});
 		
-		_.$eraseButton = $('#eraser').
+		_.$eraseButton = $('#caper-eraser').
 			tipsy({gravity: 'nw'}).
 			mousedown(function(){
 				
@@ -134,15 +148,13 @@
 				}
 			});
 		
-		_.$saveButton = $('#save').
-			tipsy({gravity: 'nw'}).
+		_.$saveButton.
 			mousedown(function(){
-				var data = _.canvas.toDataURL("image/jpg");
-				//window.open(_.canvas.toDataURL("image/jpeg")); // this doesn't work in IE9.  see. http://msdn.microsoft.com/en-us/library/cc848897%28VS.85%29.aspx
-				var image = $('<img src="'+data+'" />').appendTo(document.body).get(0);
-							
-				//window.open(image.get(0).src);
+				var data = _.canvas.toDataURL("image/jpeg");
+				_.$image.attr('src', data);
 			});
+			
+		_.$image.mousedown(function(e){return false;});
 		
 		_.$sizeDropdown.
 			find('button').
@@ -158,10 +170,11 @@
 			click(
 				function(e){
 					var pos = $button.position();
-					
+									
 					if(_.$colorDropdown.get(0) !== $dropdown.get(0)) _.$colorDropdown.hide();
 					if(_.$brushDropdown.get(0) !== $dropdown.get(0)) _.$brushDropdown.hide();
 					if(_.$sizeDropdown.get(0) !== $dropdown.get(0)) _.$sizeDropdown.hide();
+					if(_.$saveDropdown.get(0) !== $dropdown.get(0)) _.$saveDropdown.hide();
 					
 					if($dropdown.css('display') === 'block'){
 						_.$modal.hide();	
@@ -249,6 +262,7 @@
 			//_.painter.setErase(false);
 		
 			_.currentColor = _.colors[name];
+			_.writer.updateColor(_.currentColor);
 			_.painter.updateColor(_.currentColor);
 		/*}*/
 	}
@@ -270,6 +284,7 @@
 		_.$selectedSize = $button.addClass('active');
 		_.$sizeButton.addClass('caper-size-'+value);
 		
+		_.writer.fontSize = value < 10 ? 16 : ( value < 20 ? 24 : ( value < 40 ? 32 : 48) );
 		_.painter.size = value;
 		_.painter.updateBrush();
 	}
