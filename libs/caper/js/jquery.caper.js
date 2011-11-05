@@ -269,10 +269,10 @@
 			var mousedownistrue;
 			
 			$(document.body).
-				bind('mousedown',function(){
+				bind('mousedown touchstart',function(){
 					mousedownistrue = true;
 				}).
-				bind('mouseup', function(){
+				bind('mouseup touchend', function(){
 					mousedownistrue	 = false;
 				});
 			
@@ -286,9 +286,9 @@
 						_private.mouseDown(event);
 					}
 				}).
-				bind('mouseup', _private.mouseUp ).
-                bind('mousedown', _private.mouseDown ).
-                bind('mousemove', _private.mouseMove );
+				bind('mouseup touchend', _private.mouseUp ).
+                bind('mousedown touchstart', _private.mouseDown ).
+                bind('mousemove touchmove', _private.mouseMove );
 			
             return $this.
                 bind('paint.rainbow', _private.paint ).

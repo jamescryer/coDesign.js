@@ -26,6 +26,19 @@ $.caper.colors['chrome'] = {
     width : 127,
     len : 50
 };
+/*
+$.caper.colors['boat'] = {
+    frequencyR : .9,
+    frequencyG : .9,
+    frequencyB : .001,
+    //phaseR : 0,
+    phaseG : 1,
+    phaseB : 2,
+    center : 32,
+    width : 64,
+    len : 100
+};*/
+
 
 $.caper.colors['rainbow'] = {
     image: 'color/rainbow.png',

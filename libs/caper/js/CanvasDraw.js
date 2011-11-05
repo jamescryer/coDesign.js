@@ -142,13 +142,14 @@
 	}
 
 	function _makeColorGradient( o ){
-
+ 
 		// adapted from: http://www.krazydad.com/makecolors.php
+var undefined;
 
 		var frequencyR 	= o.frequencyR || .1,
 			frequencyG	= o.frequencyG || .1,
 			frequencyB	= o.frequencyB || .1,
-			phaseR		= o.phaseR || .1,
+			phaseR		= o.phaseR === undefined ? .1 : o.phaseR,
 			phaseG		= o.phaseG || .1,
 			phaseB		= o.phaseB || .1,
 			alpha		= o.alpha || .3,
