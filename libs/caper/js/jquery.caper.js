@@ -282,7 +282,7 @@
 				}).
 				bind('mouseenter', function(event){
 					// tabName check is a bit of hack
-					if(mousedownistrue && event.fromElement.tagName !== 'BUTTON') {
+					if(mousedownistrue && ( !event.fromElement || event.fromElement.tagName !== 'BUTTON')) {
 						_private.mouseDown(event);
 					}
 				}).

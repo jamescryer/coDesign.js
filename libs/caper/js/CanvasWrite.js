@@ -3,7 +3,7 @@
 	window.CanvasWrite = function( options ){
 		this.canvas = options.canvas;
 		this.fontStyle = 'bold';
-		this.fontSize = 22; /*px*/
+		this.fontSize = options.fontSize || 16; /*px*/
 		this.fontFamily = 'sans-serif';
 		this.baseline = 'top';
 		this.color = options.color || '#fff';
@@ -12,6 +12,16 @@
 		this.left = 0;
 		this.lastCharacters = [];
 	};
+
+	function _getColor(color){
+		var c;
+		if (typeof color === 'string'){
+			return color;
+		} else {
+			c = color.next();
+			return "rgba("+c.r+","+c.g+","+c.b+",.8)"
+		}
+	}
 
 	// public methods
 	window.CanvasWrite.prototype = {
@@ -25,7 +35,7 @@
 			this.color = opts.color || this.color;
 			
 			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
-			context.fillStyle = this.color;
+			
 			context.textBaseline = "middle";
 			context.globalAlpha = .9;
 		},
@@ -47,6 +57,7 @@
 				imageData: imageData
 				});
 			
+			context.fillStyle = _getColor(this.color);
 			context.fillText(text, this.left, this.top);
 			
 			this.left += width; // move to next character position
@@ -73,8 +84,11 @@
 		},
 
 		updateColor: function(color){
-			this.color = color;
+			if(typeof color === 'string'){
+				this.color = [color];
+			} else {
+				this.color = new ColorArray(color);
+			}
 		}
 	};
-
 }());
