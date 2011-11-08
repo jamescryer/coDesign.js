@@ -2,7 +2,7 @@ $.caper = $.caper || {};
 $.caper.brushes = $.caper.brushes || {};
 
 $.caper.brushes['webby'] = {
-    name: 'webby',
+    name: 'Webby',
     len : 20,
 	randomizePoints: true,
     points : 10,
@@ -23,7 +23,7 @@ $.caper.brushes['webby'] = {
 };
 
 $.caper.brushes['sketchy'] = {
-    name: 'sketchy',
+    name: 'Sketchy',
     len : 50,
 	randomizePoints: true,
     points : 2,
@@ -48,7 +48,7 @@ $.caper.brushes['sketchy'] = {
 };
 
 $.caper.brushes['spray'] = {
-    name: 'spray',
+    name: 'Spray',
 	'default': false,
     len : 10,
 	randomizePoints: true,
@@ -63,7 +63,7 @@ $.caper.brushes['spray'] = {
 };
 
 $.caper.brushes['solid'] = {
-    name: 'solid',
+    name: 'Solid',
 	'default': true,
     len : 10,
 	randomizePoints: false,

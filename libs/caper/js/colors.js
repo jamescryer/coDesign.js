@@ -2,6 +2,7 @@ $.caper = $.caper || {};
 $.caper.colors = $.caper.colors || {};
 
 $.caper.colors['chalk'] = {
+    name: 'Chalk',
     image: 'color/chalk.png',
     frequencyR : .1,
     frequencyG : .1,
@@ -15,6 +16,7 @@ $.caper.colors['chalk'] = {
 };
 
 $.caper.colors['chrome'] = {
+    name: 'Chrome',
     image: 'color/chrome.png',
     frequencyR : .1,
     frequencyG : .1,
@@ -41,6 +43,7 @@ $.caper.colors['boat'] = {
 
 
 $.caper.colors['rainbow'] = {
+    name: 'Rainbow',
     image: 'color/rainbow.png',
     frequencyR : .1,
     frequencyG : .1,

@@ -12,7 +12,7 @@
 		+ '<div class="caper-dropdown" id="caper-brushes" style="display:none">'
 		+ 	'<% for (var i in brushes) { %>'
 		+ 		'<% if(brushes.hasOwnProperty(i)) { %>'
-		+			'<button data-name="<%=i%>" class="button caper-brush-<%=i%>"><%=i%></button>'
+		+			'<button data-name="<%=i%>" class="button"><span class="caper-brush-<%=i%>">&nbsp;</span><%=brushes[i].name%></button>'
 		+ 		'<%} %>'
 		+ 	'<%} %>'
 		+ '</div>'
@@ -24,15 +24,15 @@
 		+	'<div class="caper-right-col">'
 		+ 		'<% for (var i in colors) { %>'
 		+ 			'<% if(colors.hasOwnProperty(i)) { %>'
-		+				'<button data-name="<%=i%>" class="button caper-color-<%=i%>"><%=i%></button>'
+		+				'<button data-name="<%=i%>" class="button"><span class="caper-color-<%=i%>">&nbsp;</span><%=colors[i].name%></button>'
 		+ 			'<%} %>'
 		+ 		'<%} %>'
 		+	'</div>'
 		+ '</div>'
 		+ '<div class="caper-dropdown" id="caper-sizes" style="display:none">'
-		+	'<button data-value="1" class="button caper-size-1">small</button>'
-		+	'<button data-value="16" class="button caper-size-16">medium</button>'
-		+	'<button data-value="32" class="button last caper-size-32">large</button>'
+		+	'<button data-value="1" class="button"><span class="caper-size-1">&nbsp;</span>Small</button>'
+		+	'<button data-value="16" class="button"><span class="caper-size-16">&nbsp;</span>Medium</button>'
+		+	'<button data-value="32" class="button last"><span class="caper-size-32">&nbsp;</span>Large</button>'
 		+ '</div>'
 		+ '<div class="caper-dropdown" id="caper-save" style="display:none">'
 		+	'<div class="caper-image">'
@@ -72,14 +72,17 @@
 		var htmlString = renderer({
 				brushes: _.brushes,
 				colors: _.colors,
-				defaultBrush: _.defaultBrush.name,
+				defaultBrush: _.defaultBrush.realName,
 				defaultSize: 1,
 				sizes: _.sizes
 			});
 		
 		var $control = $(htmlString).appendTo(_.$context);
 		
-		$('body').mousedown(function(){
+		$('body').mousedown(function(e){
+			
+			if(e.which !== 1) return true;
+			
 			_.$brushDropdown.hide();
 			_.$colorDropdown.hide();
 			_.$sizeDropdown.hide();
@@ -112,7 +115,7 @@
 		_.$colorPicker = $('#caper-color-picker');
 		
 		_.$colorButton.css({
-			backgroundColor: _.defaultColor
+			borderColor: _.defaultColor
 		});
 		
 		_.currentColor = _.defaultColor;
@@ -170,7 +173,7 @@
 			click(
 				function(e){
 					var pos = $button.position();
-									
+
 					if(_.$colorDropdown.get(0) !== $dropdown.get(0)) _.$colorDropdown.hide();
 					if(_.$brushDropdown.get(0) !== $dropdown.get(0)) _.$brushDropdown.hide();
 					if(_.$sizeDropdown.get(0) !== $dropdown.get(0)) _.$sizeDropdown.hide();
@@ -204,6 +207,7 @@
 	
 		
 	function rmBrushClass(_){
+		_.$brushButton.removeClass('caper-brush-'+_.defaultBrush.realName);	
 		if(_.$selectedBrush){
 			_.$brushButton.removeClass('caper-brush-'+_.$selectedBrush.data('name'));	
 		}
@@ -228,7 +232,7 @@
 		_.$eraseButton.addClass('disabled');
 		
 		_.$colorButton.css({
-			backgroundColor: hex
+			borderColor: hex
 		});
 	}
 	
@@ -255,7 +259,7 @@
 		} else {*/
 			_.$colorButton.
 				css({
-					backgroundColor: '#fff'
+					borderColor: 'transparent'
 				}).
 				addClass('caper-color-'+name);
 				

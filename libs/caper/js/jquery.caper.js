@@ -301,6 +301,7 @@
 		var i;
 		for(i in object){
 			if(object.hasOwnProperty(i) && object[i]['default']){
+				object[i].realName = i;
 				return object[i];
 			}
 		}
