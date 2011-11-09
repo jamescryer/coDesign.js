@@ -180,14 +180,14 @@
     }
 
 .caper-size-1{
-    background: url(../images/sprite.png) no-repeat 0 0 transparent;
+    background: url(../images/sprite.png) no-repeat -90px 0 transparent;
     border-bottom: 1px solid #B9B9B9 !important;
     }
 .caper-size-16{
-    background: url(../images/sprite.png) no-repeat 0 0 transparent;
+    background: url(../images/sprite.png) no-repeat -90px 0 transparent;
     border-bottom: 2px solid #B9B9B9 !important;
     }
 .caper-size-32{
-    background: url(../images/sprite.png) no-repeat 0 0 transparent;
+    background: url(../images/sprite.png) no-repeat -90px 0 transparent;
     border-bottom: 3px solid #B9B9B9 !important;
     }
