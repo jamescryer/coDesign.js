@@ -1,4 +1,3 @@
-
 <!doctype html>
 <!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
 <!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
@@ -8,13 +7,14 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-	<title>Examples and documentation on caper.js</title>
-	<meta name="description" content="Examples and documentation on caper.js">
+	<title>Examples and documentation on coDesign.js</title>
+	<meta name="description" content="Examples and documentation on coDesign.js">
 	<meta name="author" content="James Cryer">
 
 	<link href="libs/farbtastic/farbtastic.css" rel="stylesheet" type="text/css" />
 	<link href="libs/tipsy/src/stylesheets/tipsy.css" rel="stylesheet" type="text/css" />
-	<link href="libs/caper/css/jquery.caper.css" rel="stylesheet" type="text/css" />
+	<!-- link href="src/css/coDesign.css" rel="stylesheet" type="text/css" /-->
+	<link href="libs/codesign/css/coDesign.min.css" rel="stylesheet" type="text/css" />
 
 	<style>
 		body {
@@ -125,47 +125,42 @@
 
 	<div id="container">
 		<header>
-			<h1>caper.js</h1>
+			<h1>coDesign.js</h1>
 		</header>
 		<div id="main" role="main">
 			<br/>
 			<p>
-				caper.js is a simple tool for creative fun collaboration. Originally an experiment with HTML5 canvas,
-				caper.js is built for the co-creation of low-fidelity designs in <a href="#">realtime</a> with others across the Web.
+				coDesign.js is a simple tool for creative fun collaboration. Originally an experiment with HTML5 canvas,
+				coDesign.js is built for the co-creation of low-fidelity designs in <a href="#">realtime</a> with others across the Web.
 				It's open source on <a href="#">Github</a>.
 			</p>
 			
-			<div id="caper" style="position: relative; border:1px solid #ccc; width: 400px; height: 300px;"></div>
+			<div id="codesign" style="position: relative; border:1px solid #ccc; width: 400px; height: 300px;"></div>
 
 			<p>
 				<a href="fullscreen-example.html">Full screen mode</a> is also supported
 			</p>
 			
 			<h2>Examples</h2>
-			<p>
-				burb
-			</p>
+
 			<pre>
-$('#caper').caper();
-			</pre>
+$('#codesign').coDesign();</pre>
 
 			<p>
 				No controls.
 			</p>
 			<pre>
-$('#caper').caper({
+$('#codesign').coDesign({
 	enableControls: false
-});
-			</pre>
+});</pre>
 
 			<p>
 				Fullscreen
 			</p>
 			<pre>
-$('#caper').caper({
+$('#codesign').coDesign({
 	fullScreen: true
-});
-			</pre>
+});</pre>
 
 		</div>
 		
@@ -174,27 +169,24 @@ $('#caper').caper({
 		</p>
 
 		<pre>
-$('#caper').caper({
+$('#codesign').coDesign({
 	onDraw: function( everythingYouNeed ){
 		// why dont you push everythingYouNeed to other clients, perhaps via Socket.IO
 	},
-	onWrite: function( everythingYouNeed ){
-		// as above ^-^
-	},
-});
-
-$('#caper').caper('draw', everyThingItNeeds ); // trigger draw event
-$('#caper').caper('write', everyThingItNeeds ); // trigger write event
-		</pre>
-			
-		<h2>What is this magic?</h2>
+	onWrite: function( everythingYouNeed ){}
+});</pre>
 		<p>
-			Lots of JavaScript and HTML5 canvas.
+			And you can trigger the events like this:
 		</p>
+<pre>
+$('#codesign').coDesign('draw', everyThingItNeeds ); // trigger draw event
+$('#codesign').coDesign('write', everyThingItNeeds ); // trigger write event</pre>
+			
+
 		
 		<h2>Credit due</h2>
 		<p>
-			.......
+			Although I've mosty worked on this in my own time I'd like to thank the awesome <a href="https://www.huddle.com" target="_blank">Huddle.com</a> for 'Tuesday Time', the day when developers at Huddle get the chance to contribute back to the Open Source community.
 		</p>
 		
 		<footer>
@@ -205,21 +197,23 @@ $('#caper').caper('write', everyThingItNeeds ); // trigger write event
 		</footer>
 	</div> <!-- eo #container -->
 
-	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 	
 	<script type="text/javascript" src="libs/farbtastic/farbtastic.js"></script>
 	<script type="text/javascript" src="libs/tipsy/src/javascripts/jquery.tipsy.js"></script>
 	
-	<script type="text/javascript" src="libs/caper/js/brushes.js"></script>
-	<script type="text/javascript" src="libs/caper/js/colors.js"></script>
-	<script type="text/javascript" src="libs/caper/js/ColorArray.js"></script>
-	<script type="text/javascript" src="libs/caper/js/CanvasDraw.js"></script>
-	<script type="text/javascript" src="libs/caper/js/CanvasWrite.js"></script>
-	<script type="text/javascript" src="libs/caper/js/CanvasControl.js"></script>
-	<script type="text/javascript" src="libs/caper/js/jquery.caper.js"></script>
+	<!--script type="text/javascript" src="src/js/brushes.js"></script>
+	<script type="text/javascript" src="src/js/colors.js"></script>
+	<script type="text/javascript" src="src/js/ColorArray.js"></script>
+	<script type="text/javascript" src="src/js/CanvasDraw.js"></script>
+	<script type="text/javascript" src="src/js/CanvasWrite.js"></script>
+	<script type="text/javascript" src="src/js/CanvasControl.js"></script>
+	<script type="text/javascript" src="src/js/jquery.coDesign.js"></script -->
+	
+	<script type="text/javascript" src="libs/coDesign/js/jquery.coDesign.min.js"></script>
 	
 	<script>
-		$('#caper').caper();
+		$('#codesign').coDesign();
 	</script>
 	
 </body>

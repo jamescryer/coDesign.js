@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>caper.js - fullscreen</title>
+		<title>coDesign.js - fullscreen example</title>
 
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
 		<link href="libs/farbtastic/farbtastic.css" rel="stylesheet" type="text/css" />
 		<link href="libs/tipsy/src/stylesheets/tipsy.css" rel="stylesheet" type="text/css" />
-		<link href="libs/caper/css/jquery.caper.css" rel="stylesheet" type="text/css" />
+		<!-- link href="src/css/coDesign.css" rel="stylesheet" type="text/css" /-->
+		<link href="libs/codesign/css/coDesign.min.css" rel="stylesheet" type="text/css" />
 		
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.5.2/jquery.min.js"></script>
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
 		
 		<script type="text/javascript" src="libs/farbtastic/farbtastic.js"></script>
 		<script type="text/javascript" src="libs/tipsy/src/javascripts/jquery.tipsy.js"></script>
 		
-		<script type="text/javascript" src="libs/caper/js/brushes.js"></script>
-		<script type="text/javascript" src="libs/caper/js/colors.js"></script>
-		<script type="text/javascript" src="libs/caper/js/ColorArray.js"></script>
-		<script type="text/javascript" src="libs/caper/js/CanvasDraw.js"></script>
-		<script type="text/javascript" src="libs/caper/js/CanvasWrite.js"></script>
-		<script type="text/javascript" src="libs/caper/js/CanvasControl.js"></script>
-		<script type="text/javascript" src="libs/caper/js/jquery.caper.js"></script>
+		<!--script type="text/javascript" src="src/js/brushes.js"></script>
+		<script type="text/javascript" src="src/js/colors.js"></script>
+		<script type="text/javascript" src="src/js/ColorArray.js"></script>
+		<script type="text/javascript" src="src/js/CanvasDraw.js"></script>
+		<script type="text/javascript" src="src/js/CanvasWrite.js"></script>
+		<script type="text/javascript" src="src/js/CanvasControl.js"></script>
+		<script type="text/javascript" src="src/js/jquery.coDesign.js"></script -->
+		
+		<script type="text/javascript" src="libs/coDesign/js/jquery.coDesign.min.js"></script>
 		
 		<style>
 			body {
@@ -30,12 +33,11 @@
 			}
 		</style>
 		
-		
 	</head>
 	<body>
 		<div id="rainbow"></div>
 		<script>
-			$('#rainbow').caper({
+			$('#rainbow').coDesign({
 				fullScreen: true,
 				brushes: window.brushes,
 				colors: window.colors,
