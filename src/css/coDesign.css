@@ -43,31 +43,32 @@
     z-index: 998;
     padding: 44px 2px 2px 2px;
     background: #eee;
-    border: 1px solid #B9B9B9;
+    border: 1px solid #666;
     border-radius: 0px 3px 3px 3px;
     top:-1px;
     left:-1px;
     min-width: 164px;
+    padding-left: 4px;
     }
     .codesign-dropdown .button{
         font-size: 11px;
         margin-bottom: 8px;
         margin-right: 8px;
         text-align: left;
-        color: #888;
+        color: #666;
         background: #eee;
         border: none;
         cursor: pointer;
-        border: 1px solid #eee;
+        border: 0;
         border-radius: 3px 3px 3px 3px;
-        padding: 0 0 2px;
+        padding: 0;
         }
         .codesign-dropdown .button:hover {
             color: #999;    
             }
-        .codesign-dropdown button.active {
+        /*.codesign-dropdown button.active {
             border-bottom: 2px solid #ddd !important;
-            }
+            }*/
         .codesign-dropdown .button span{
             display: inline-block;
             margin-right: 8px;
@@ -84,10 +85,10 @@
         }
         .codesign-image img {
             width: 250px;
-            border: 1px solid #B9B9B9;
+            border: 1px solid #666;
             }
         .codesign-save-message {
-            color: #888;
+            color: #666;
             margin: 0;
             padding: 0 8px 8px 8px;
             text-align: center;
@@ -97,12 +98,12 @@
         .codesign-dropdown .codesign-save-okay-button {
             border-radius: 3px;
             -moz-border-radius: 3px;
-            background-color: #B9B9B9;
+            background-color: #666;
             color: #FFF;
             display: block;
             font-size: 11px;
             height: 36px;
-            border: 1px solid #B9B9B9;
+            border: 1px solid #666;
             text-align: left;
             float: right;
             margin: 8px;
@@ -133,7 +134,7 @@
             visibility: hidden;
             }
         .codesign-middle-text {
-            color: #888;
+            color: #666;
             font-size: 14px;
             left: 224px;
             position: absolute;
@@ -179,18 +180,18 @@
 
 .codesign-selected-color {
     background: url(../images/sprite.png) no-repeat 0 0 transparent;
-    border-bottom: 1px solid #B9B9B9;
+    border-bottom: 1px solid #666;
     }
 
 .codesign-size-1{
     background: url(../images/sprite.png) no-repeat -90px 0 transparent;
-    border-bottom: 1px solid #B9B9B9 !important;
+    border-bottom: 1px solid #666 !important;
     }
 .codesign-size-16{
     background: url(../images/sprite.png) no-repeat -90px 0 transparent;
-    border-bottom: 2px solid #B9B9B9 !important;
+    border-bottom: 2px solid #666 !important;
     }
 .codesign-size-32{
     background: url(../images/sprite.png) no-repeat -90px 0 transparent;
-    border-bottom: 3px solid #B9B9B9 !important;
+    border-bottom: 3px solid #666 !important;
     }
