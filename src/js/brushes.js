@@ -65,7 +65,7 @@ $.coDesign.brushes['spray'] = {
 $.coDesign.brushes['solid'] = {
     name: 'Solid',
 	'default': true,
-    len : 10,
+    len : 1,
 	randomizePoints: false,
     points : 70,
     layers : 10,

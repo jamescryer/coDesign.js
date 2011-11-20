@@ -3,11 +3,11 @@
 	var view = ''
 		+ '<div class="codesign-modal" id="codesign-modal" style="display:none;"></div>'
 		+ '<div class="codesign-control">'
-		+ 	'<button id="codesign-selected-brush" title="Select a brush" class="codesign-brush-<%=defaultBrush%>"></button>'
+		+ 	'<button data-name="save" id="codesign-save-button" title="Open in new window as image" class="codesign-save last"></button>'
 		+ 	'<button id="codesign-selected-size" title="Choose a brush size" class="codesign-size-<%=defaultSize%>"></button>'
+		+ 	'<button id="codesign-selected-brush" title="Select a brush" class="codesign-brush-<%=defaultBrush%>"></button>'
 		+ 	'<button id="codesign-selected-color" title="What color would you like?"></button>'
 		+ 	'<button data-name="eraser" id="codesign-eraser" title="Click to use eraser" class="codesign-eraser disabled"></button>'
-		+ 	'<button data-name="save" id="codesign-save-button" title="Open in new window as image" class="codesign-save last"></button>'
 		+ '</div>'
 		+ '<div class="codesign-dropdown" id="codesign-brushes" style="display:none">'
 		+ 	'<% for (var i in brushes) { %>'
@@ -119,6 +119,7 @@
 		});
 		
 		_.currentColor = _.defaultColor;
+		_.currentBrush = _.currentBrush;
 		
 		$.farbtastic(_.$colorPicker).
 			setColor(_.defaultColor).
@@ -144,10 +145,21 @@
 				
 				if(_.$eraseButton.hasClass('disabled')){
 					_.painter.updateColor('#fff');
+					_.painter.updateBrush({
+						len : 1,
+						randomizePoints: false,
+						randomizeSpin: false,
+						spin: 45,
+						points : 70,
+						layers : 10,
+						connectLines: true,
+						pressure: {
+							softness: 0
+						}
+					});
 					_.$eraseButton.removeClass('disabled');
 				} else {
-					_.painter.updateColor(_.currentColor);
-					_.$eraseButton.addClass('disabled');
+					setCurrent(_);
 				}
 			});
 		
@@ -201,8 +213,10 @@
 		
 		rmBrushClass(_);
 		_.$selectedBrush = $button.addClass('active');
-		_.$brushButton.addClass('codesign-brush-'+name);	
-        _.painter.updateBrush(_.brushes[name]);
+		_.$brushButton.addClass('codesign-brush-'+name);
+		
+		_.currentBrush = _.brushes[name];
+        setCurrent(_);
 	}
 	
 		
@@ -216,9 +230,7 @@
 	function selectColor(_, $control, $button, hex){
 		
 		_.currentColor = hex;
-		
-		_.painter.updateColor(hex);
-		_.writer.updateColor(hex);
+		setCurrent(_);
 		
 		if(_.$selectedColor){
 			_.$selectedColor.
@@ -234,6 +246,13 @@
 		_.$colorButton.css({
 			borderColor: hex
 		});
+	}
+	
+	function setCurrent(_){
+		_.$eraseButton.addClass('disabled');
+		_.painter.updateColor(_.currentColor);
+		_.writer.updateColor(_.currentColor);
+		_.painter.updateBrush(_.currentBrush);
 	}
 	
 	function selectComplexColor(_, $control, $button){
@@ -266,8 +285,7 @@
 			//_.painter.setErase(false);
 		
 			_.currentColor = _.colors[name];
-			_.writer.updateColor(_.currentColor);
-			_.painter.updateColor(_.currentColor);
+			setCurrent(_);
 		/*}*/
 	}
 	
