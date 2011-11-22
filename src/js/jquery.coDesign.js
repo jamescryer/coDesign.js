@@ -274,10 +274,10 @@
 			var mousedownistrue;
 			
 			$(document.body).
-				bind('mousedown touchstart',function(){
+				bind('mousedown',function(){
 					mousedownistrue = true;
 				}).
-				bind('mouseup touchend', function(){
+				bind('mouseup', function(){
 					mousedownistrue	 = false;
 				});
 			
@@ -291,10 +291,14 @@
 						_private.mouseDown(event);
 					}
 				}).
-				bind('mouseup touchend', _private.mouseUp ).
-                bind('mousedown touchstart', _private.mouseDown ).
-                bind('mousemove touchmove', _private.mouseMove );
+				bind('mouseup', _private.mouseUp ).
+                bind('mousedown', _private.mouseDown ).
+                bind('mousemove', _private.mouseMove );
 			
+            canvas.get(0).addEventListener('touchstart', _private.mouseDown, false);
+            canvas.get(0).addEventListener('touchmove', _private.mouseMove , false);
+            canvas.get(0).addEventListener('touchend', _private.mouseUp , false);
+
             return $this.
                 bind('paint.rainbow', _private.paint ).
                 bind('write.rainbow', _private.write );
