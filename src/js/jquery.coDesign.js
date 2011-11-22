@@ -359,9 +359,9 @@
                 bind('mousedown', _private.mouseDown ).
                 bind('mousemove', _private.mouseMove );
 			
-            canvas.get(0).addEventListener('touchstart', _private.mouseDown, false);
-            canvas.get(0).addEventListener('touchmove', _private.mouseMove , false);
-            canvas.get(0).addEventListener('touchend', _private.mouseUp , false);
+            canvas.get(0).addEventListener('touchstart', _private.touchDown, false);
+            canvas.get(0).addEventListener('touchmove', _private.touchMove , false);
+            canvas.get(0).addEventListener('touchend', _private.touchUp , false);
 
             return $this.
                 bind('paint.rainbow', _private.paint ).
