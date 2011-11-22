@@ -123,6 +123,8 @@
                     var top = event.clientY + window.pageYOffset - position.top,
                         left = event.clientX + window.pageXOffset - position.left;
 
+                    event.preventDefault();
+
                     textRenderer
                         .begin({
                             top: top,
@@ -151,6 +153,8 @@
 					var x = event.clientX + window.pageXOffset - position.left,
 						y = event.clientY + window.pageYOffset - position.top;
 					
+                    event.preventDefault();
+
                     canvas.focus();
 
                     rainbow.begin();
@@ -182,6 +186,8 @@
                 
                 mouseMove: function( event ){
 					
+                    event.preventDefault();
+
 					if(!rainbow.isActive) return;
 					
 					var x = event.clientX + window.pageXOffset - position.left,
@@ -203,6 +209,8 @@
                             'y': y
                         });
                     }
+
+
                 },
                 
                 paint: function( config ){
