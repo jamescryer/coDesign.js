@@ -7,17 +7,30 @@ A simple tool for creative fun collaboration. Originally an experiment with HTML
 coDesign.js is built for the co-creation of low-fidelity designs in realtime with others across the Web.
 
 Third party color picker from http://acko.net/dev/farbtastic
+Third party tooltips from http://onehackoranother.com/projects/jquery/tipsy/
 
 Author
 ------
 James Cryer
 
-TODO:
+KNOWN BUGS:
 -----
 
-+ Documentation
-+ Link to realtime example
-+ Performance tweaks
++ Messages disappear
++ Random disconnects
++ Large brush performance
++ Back / forward history breaks controlls
++ Rejoining rooms doesn't always work
++ Other people can change your text size
+
+KNOWN USEABILITY ISSUES:
+-----
+
++ Save dialog not clear
++ Canvas doesn't resize on window resize
++ No undo / no delete
++ First screen isn't clear enough
++ No persistance / save
 
 Licence
 -------
