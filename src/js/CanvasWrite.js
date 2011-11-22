@@ -56,7 +56,7 @@
 				width: width,
 				imageData: imageData
 				});
-			
+
 			context.fillStyle = _getColor(this.color);
 			context.fillText(text, this.left, this.top);
 			
@@ -85,7 +85,7 @@
 
 		updateColor: function(color){
 			if(typeof color === 'string'){
-				this.color = [color];
+				this.color = color;
 			} else {
 				this.color = new $.coDesign.ColorArray(color);
 			}

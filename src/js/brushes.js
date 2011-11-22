@@ -67,8 +67,8 @@ $.coDesign.brushes['solid'] = {
 	'default': true,
     len : 1,
 	randomizePoints: false,
-    points : 70,
-    layers : 10,
+    points : 40,
+    layers : 15,
 	connectLines: true,
 	pressure: {
 		softness: 0

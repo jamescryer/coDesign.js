@@ -7,7 +7,7 @@
 		+ 	'<button id="codesign-selected-size" title="Choose a brush size" class="codesign-size-<%=defaultSize%>"></button>'
 		+ 	'<button id="codesign-selected-brush" title="Select a brush" class="codesign-brush-<%=defaultBrush%>"></button>'
 		+ 	'<button id="codesign-selected-color" title="What color would you like?"></button>'
-		+ 	'<button data-name="eraser" id="codesign-eraser" title="Click to use eraser" class="codesign-eraser disabled"></button>'
+		//+ 	'<button data-name="eraser" id="codesign-eraser" title="Click to use eraser" class="codesign-eraser disabled"></button>'
 		+ '</div>'
 		+ '<div class="codesign-dropdown" id="codesign-brushes" style="display:none">'
 		+ 	'<% for (var i in brushes) { %>'

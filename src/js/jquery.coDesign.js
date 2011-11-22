@@ -35,7 +35,7 @@
             width       = options.width || $this.width();
             height      = options.fullScreen ? $(window).height() : (options.height || $this.height());
 
-            canvas      = $('<canvas class="codesign-canvas" width="'+width+'" height="'+height+'" />').appendTo($this);
+            canvas      = $('<canvas tabindex="1" class="codesign-canvas" width="'+width+'" height="'+height+'" />').appendTo($this);
             
 			if(!canvas.get(0).getContext || !canvas.get(0).getContext("2d")){
 				alert('coDesign.js will not work for you.  Your browser does not support HTML5 canvas.  Please consider upgrading your browser.');
@@ -67,12 +67,9 @@
                         canvas:canvas.get(0),
                         color: options.color
                     });
-        
-                    textarea = $('<textarea style="position:absolute;"></textarea>').prependTo($this);
-        
-                    textarea
-                        .bind('keyup', _private.textareaKeyUp );
-                    
+
+                    canvas.get(0).onkeypress = _private.textareaKeyUp;
+
                     if(options.enableControls){
 						_private.enableControls();
                     }
@@ -81,29 +78,29 @@
                 
                 textareaKeyUp: function( event ){
                     
-                    var action;
+                    var action,
+                        charCode = event.which,
+                        charStr = String.fromCharCode(charCode);
 
-                    if(event.keyCode === 8){
+                    if(charCode === 8){
                         action = 'backspace';
                         textRenderer.backspace();
                     }
                     else
-                    if(event.keyCode === 13){
+                    if(charCode === 13){
                         action = 'newline';
                         textRenderer.newline();
                     }
                     else {
                         action = 'complete';
-                        textRenderer.draw(this.value);
+                        textRenderer.draw(charStr);
                     }
 
                     options.onWrite({
                         'action': action,
-                        'value': this.value,
+                        'value': charStr,
                         'color': textRenderer.color
                     });
-
-                    this.value = '';
                 },
                 
                 enableControls: function(){
@@ -139,8 +136,6 @@
                         'color': textRenderer.color
                     });
 
-                    textarea.focus();
-
                     clearInterval(timer);
                     rainbow.complete();
 
@@ -156,6 +151,8 @@
 					var x = event.clientX + window.pageXOffset - position.left,
 						y = event.clientY + window.pageYOffset - position.top;
 					
+                    canvas.focus();
+
                     rainbow.begin();
 
                     options.onDraw({
@@ -180,7 +177,7 @@
                             });
                         }
 
-                    },100);
+                    },300);
                 },
                 
                 mouseMove: function( event ){
