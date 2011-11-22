@@ -46,6 +46,9 @@
 			
 			defaultBrush = getDefault(options.brushes);
 
+           var lines = [];
+           var offset = canvas.offset();
+
             _private = {
                 
                 init: function(){
@@ -189,7 +192,7 @@
                     event.preventDefault();
 
 					if(!rainbow.isActive) return;
-					
+
 					var x = event.clientX + window.pageXOffset - position.left,
 						y = event.clientY + window.pageYOffset - position.top;
 					
@@ -209,8 +212,69 @@
                             'y': y
                         });
                     }
+                },
 
+                touchUp: function( event ){
+                    event.preventDefault();
 
+                    rainbow.complete();
+
+                    options.onDraw({
+                        type: 'push-paint',
+                        action: 'complete'
+                    });
+                },
+
+                touchDown: function( event ){
+                                       
+                    event.preventDefault();
+
+                    // for touch screens
+                    $.each(event.touches, function(i, touch) {
+                        var id = touch.identifier;
+                        lines[id] = { 
+                            x : this.pageX - offset.left, 
+                            y : this.pageY - offset.top
+                        };
+                    });
+
+                    canvas.focus();
+                    rainbow.begin();
+                    options.onDraw({
+                        'type': 'push-paint',
+                        'action': 'begin'
+                    });
+                },
+
+                touchMove: function( event ){
+                    
+                    event.preventDefault();
+
+                    if(!rainbow.isActive) return;
+                    
+                    $.each(event.touches, function(i, touch) {
+                        var id = touch.identifier,
+                            moveX = this.pageX - offset.left - lines[id].x,
+                            moveY = this.pageY - offset.top - lines[id].y;
+
+                        rainbow.draw({
+                            x: lines[i].x,
+                            y: lines[i].y
+                        });
+
+                        if(rainbow.isActive && rainbow.brush && rainbow.color){
+                            options.onDraw({
+                                'action': 'incomplete',
+                                'brush': rainbow.brush,
+                                'color': rainbow.color,
+                                'x': x,
+                                'y': y
+                            });
+                        }
+
+                        lines[id].x = lines[i].x + moveX;
+                        lines[id].y = lines[i].y + moveY;
+                    });
                 },
                 
                 paint: function( config ){
