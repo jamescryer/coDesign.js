@@ -17,39 +17,47 @@
 
     $.fn['coDesign'] = function(opts, args){
 
-        this.each(function(){
+        return this.each(function(){
             
             var $this = $(this),
-                options, width, height, canvas, position, timer, rainbow, textRenderer, textarea, defaultBrush, _private;
+                timer, 
+                canvasPainter, 
+                textRenderer, 
+                textarea,
+                mousedownistrue,
+                defaultBrush;
 
             if(typeof opts === 'string'){
                 $this.trigger({
-                    type:opts+'.rainbow',
+                    type:opts+'.codesign',
                     options: args
                 });
-                return $this;
+                return true;
             }
 
-            $this       = $(this);
-            options     = $.extend({}, defaults, opts || {});
-            width       = options.width || $this.width();
-            height      = options.fullScreen ? $(window).height() : (options.height || $this.height());
+            if( $.data(this, 'IsCoDesign') ){
+                $this.trigger({
+                    type:'update.codesign',
+                    options: opts
+                });
+                return true;
+            }
 
-            canvas      = $('<canvas tabindex="1" class="codesign-canvas" width="'+width+'" height="'+height+'" />').appendTo($this);
+            var options     = $.extend({}, defaults, opts || {});
+            var width       = options.width || $this.width();
+            var height      = options.fullScreen ? $(window).height() : (options.height || $this.height());
+            var canvas      = $('<canvas tabindex="1" class="codesign-canvas" width="'+width+'" height="'+height+'" />').appendTo($this);
             
 			if(!canvas.get(0).getContext || !canvas.get(0).getContext("2d")){
 				alert('coDesign.js will not work for you.  Your browser does not support HTML5 canvas.  Please consider upgrading your browser.');
 				return false;
-		   }
+            }
 			
-            position    = $this.position();
-			
-			defaultBrush = getDefault(options.brushes);
+            var position    = $this.position();
+            var lines = [];
+            var offset = canvas.offset();
 
-           var lines = [];
-           var offset = canvas.offset();
-
-            _private = {
+            var _private = {
                 
                 init: function(){
 					
@@ -59,7 +67,9 @@
 					
 					canvas.mousedown(function(e){e.preventDefault();});
 					
-                    rainbow = new $.coDesign.CanvasDraw( {
+                    defaultBrush = _private.getDefault(options.brushes);
+
+                    canvasPainter = new $.coDesign.CanvasDraw( {
                         canvas: canvas.get(0),
                         color  : options.color,
                         size  : options.brushSize,
@@ -76,7 +86,10 @@
                     if(options.enableControls){
 						_private.enableControls();
                     }
-					
+
+                    _private.bindCoDesignEvents();
+
+                    $.data($this.get(0), 'IsCoDesign', true);
                 },
                 
                 textareaKeyUp: function( event ){
@@ -112,7 +125,7 @@
 						canvas:canvas.get(0),
                         brushes: options.brushes,
                         colors: options.colors,
-                        painter: rainbow,
+                        painter: canvasPainter,
                         writer: textRenderer,
                         $context: $this,
                         defaultColor: options.color,
@@ -142,7 +155,7 @@
                     });
 
                     clearInterval(timer);
-                    rainbow.complete();
+                    canvasPainter.complete();
 
                     options.onDraw({
                         type: 'push-paint',
@@ -160,7 +173,7 @@
 
                     canvas.focus();
 
-                    rainbow.begin();
+                    canvasPainter.begin();
 
                     options.onDraw({
                         'type': 'push-paint',
@@ -168,17 +181,17 @@
                     });
 
                     timer = setInterval(function(){
-                        rainbow
+                        canvasPainter
                             .draw({
                                 x: x,
                                 y: y
                             });
 
-                        if(rainbow.brush && rainbow.color){
+                        if(canvasPainter.brush && canvasPainter.color){
                             options.onDraw({
                                 'action': 'incomplete',
-                                'brush': rainbow.brush,
-                                'color': rainbow.color,
+                                'brush': canvasPainter.brush,
+                                'color': canvasPainter.color,
                                 'x': x,
                                 'y': y
                             });
@@ -191,23 +204,23 @@
 					
                     event.preventDefault();
 
-					if(!rainbow.isActive) return;
+					if(!canvasPainter.isActive) return;
 
 					var x = event.clientX + window.pageXOffset - position.left,
 						y = event.clientY + window.pageYOffset - position.top;
 					
                     clearInterval(timer);
 					
-                    rainbow.draw({
+                    canvasPainter.draw({
                         x: x,
                         y: y
                     });
 
-                    if(rainbow.isActive && rainbow.brush && rainbow.color){
+                    if(canvasPainter.isActive && canvasPainter.brush && canvasPainter.color){
                         options.onDraw({
                             'action': 'incomplete',
-                            'brush': rainbow.brush,
-                            'color': rainbow.color,
+                            'brush': canvasPainter.brush,
+                            'color': canvasPainter.color,
                             'x': x,
                             'y': y
                         });
@@ -217,7 +230,7 @@
                 touchUp: function( event ){
                     event.preventDefault();
 
-                    rainbow.complete();
+                    canvasPainter.complete();
 
                     options.onDraw({
                         type: 'push-paint',
@@ -239,7 +252,7 @@
                     });
 
                     canvas.focus();
-                    rainbow.begin();
+                    canvasPainter.begin();
                     options.onDraw({
                         'type': 'push-paint',
                         'action': 'begin'
@@ -250,23 +263,23 @@
                     
                     event.preventDefault();
 
-                    if(!rainbow.isActive) return;
+                    if(!canvasPainter.isActive) return;
                     
                     $.each(event.touches, function(i, touch) {
                         var id = touch.identifier,
                             moveX = this.pageX - offset.left - lines[id].x,
                             moveY = this.pageY - offset.top - lines[id].y;
 
-                        rainbow.draw({
+                        canvasPainter.draw({
                             x: lines[i].x,
                             y: lines[i].y
                         });
 
-                        if(rainbow.isActive && rainbow.brush && rainbow.color){
+                        if(canvasPainter.isActive && canvasPainter.brush && canvasPainter.color){
                             options.onDraw({
                                 'action': 'incomplete',
-                                'brush': rainbow.brush,
-                                'color': rainbow.color,
+                                'brush': canvasPainter.brush,
+                                'color': canvasPainter.color,
                                 'x': x,
                                 'y': y
                             });
@@ -330,54 +343,90 @@
                     if (action === 'newline'){ client.newline(); }
                     else
                     if (action === 'backspace'){ client.backspace(); }
+                },
+
+                onBodyMouseDown : function(){
+                    mousedownistrue = true;
+                },
+
+                onBodyMouseUp : function(){
+                    mousedownistrue  = false;
+                },
+                
+                destroy : function(){
+                    $(document.body).
+                        unbind('mousedown',_private.onBodyMouseDown).
+                        unbind('mouseup', _private.onBodyMouseUp);
+
+                    $this.empty(); // will unbind canvas events and remove element
+                    
+                    $this.
+                        unbind('paint.codesign', _private.paint ).
+                        unbind('write.codesign', _private.write ).
+                        unbind('update.codesign', _private.update).
+                        unbind('destroy.codesign', _private.destroy);
+
+                    $.data(this, 'IsCoDesign', false);
+                    delete _private;
+                },
+
+                update : function( event ){
+                    $.extend(options, event.options || {});
+                },
+
+                clear : function(){
+                    var cnv = canvas.get(0),
+                        context = cnv.getContext('2d');
+
+                    context.clearRect(0,0,cnv.width,cnv.height);
+                },
+
+                bindCoDesignEvents: function(){
+                    var cnv = canvas.get(0);
+
+                    $(document.body).
+                        bind('mousedown',_private.onBodyMouseDown).
+                        bind('mouseup', _private.onBodyMouseUp);
+                    
+                    canvas.
+                        bind('mouseleave', function(event){
+                            _private.mouseUp(event);
+                        }).
+                        bind('mouseenter', function(event){
+                            // tabName check is a bit of hack
+                            if(mousedownistrue && ( !event.fromElement || event.fromElement.tagName !== 'BUTTON')) {
+                                _private.mouseDown(event);
+                            }
+                        }).
+                        bind('mouseup', _private.mouseUp ).
+                        bind('mousedown', _private.mouseDown ).
+                        bind('mousemove', _private.mouseMove );
+                    
+                    cnv.addEventListener('touchstart', _private.touchDown, false);
+                    cnv.addEventListener('touchmove', _private.touchMove , false);
+                    cnv.addEventListener('touchend', _private.touchUp , false);
+
+                    $this.
+                        bind('paint.codesign', _private.paint ).
+                        bind('write.codesign', _private.write ).
+                        bind('update.codesign', _private.update).
+                        bind('destroy.codesign', _private.destroy).
+                        bind('clear.codesign', _private.clear);
+                },
+
+                getDefault : function(object){
+                    var i;
+                    for(i in object){
+                        if(object.hasOwnProperty(i) && object[i]['default']){
+                            object[i].realName = i;
+                            return object[i];
+                        }
+                    }
                 }
-            }
+
+            };
 
             _private.init();
-            
-			var mousedownistrue;
-			
-			$(document.body).
-				bind('mousedown',function(){
-					mousedownistrue = true;
-				}).
-				bind('mouseup', function(){
-					mousedownistrue	 = false;
-				});
-			
-			canvas.
-				bind('mouseleave', function(event){
-					_private.mouseUp(event);
-				}).
-				bind('mouseenter', function(event){
-					// tabName check is a bit of hack
-					if(mousedownistrue && ( !event.fromElement || event.fromElement.tagName !== 'BUTTON')) {
-						_private.mouseDown(event);
-					}
-				}).
-				bind('mouseup', _private.mouseUp ).
-                bind('mousedown', _private.mouseDown ).
-                bind('mousemove', _private.mouseMove );
-			
-            canvas.get(0).addEventListener('touchstart', _private.touchDown, false);
-            canvas.get(0).addEventListener('touchmove', _private.touchMove , false);
-            canvas.get(0).addEventListener('touchend', _private.touchUp , false);
-
-            return $this.
-                bind('paint.rainbow', _private.paint ).
-                bind('write.rainbow', _private.write );
         });
-
     };
-
-	function getDefault(object){
-		var i;
-		for(i in object){
-			if(object.hasOwnProperty(i) && object[i]['default']){
-				object[i].realName = i;
-				return object[i];
-			}
-		}
-	}
-
 }(jQuery));
