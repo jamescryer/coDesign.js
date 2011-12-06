@@ -111,11 +111,10 @@
                         action = 'complete';
                         textRenderer.draw(charStr);
                     }
-
                     options.onWrite({
                         'action': action,
                         'value': charStr,
-                        'color': textRenderer.color
+                        'color': textRenderer.colorString
                     });
                 },
                 
@@ -151,7 +150,7 @@
                         'action': 'begin',
                         'top': top,
                         'left':  left,
-                        'color': textRenderer.color
+                        'color': textRenderer.colorString
                     });
 
                     clearInterval(timer);

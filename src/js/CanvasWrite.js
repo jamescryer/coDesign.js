@@ -7,6 +7,7 @@
 		this.fontFamily = 'sans-serif';
 		this.baseline = 'top';
 		this.color = options.color || '#fff';
+		this.colorString = '#fff';
 		this.align = 'left';
 		this.top = 0;
 		this.left = 0;
@@ -33,7 +34,7 @@
 			this.beginLeft = opts.left;
 			this.left = opts.left;
 			this.color = opts.color || this.color;
-			
+
 			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
 			
 			context.textBaseline = "middle";
@@ -88,6 +89,7 @@
 				this.color = color;
 			} else {
 				this.color = new $.coDesign.ColorArray(color);
+				this.colorString = _getColor( new $.coDesign.ColorArray(color) );
 			}
 		}
 	};

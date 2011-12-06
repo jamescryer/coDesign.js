@@ -19,17 +19,14 @@ KNOWN BUGS:
 + Messages disappear
 + Random disconnects
 + Large brush performance
-+ Back / forward history breaks controlls
-+ Rejoining rooms doesn't always work
 + Other people can change your text size
 
 KNOWN USEABILITY ISSUES:
 -----
 
-+ Save dialog not clear
 + Canvas doesn't resize on window resize
 + No undo / no delete
-+ First screen isn't clear enough
++ First screen of realtime exampple isn't clear enough
 + No persistance / save
 
 Licence

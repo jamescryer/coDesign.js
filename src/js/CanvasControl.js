@@ -39,7 +39,6 @@
 		+		'<img src="" id="codesign-image" />'
 		+	'</div>'
 		+	'<p class="codesign-save-message">To save, right click on the above image, and then select "Save Image As".</p>'
-		+	'<button class="codesign-save-okay-button">Okay, I\'m done</button>'
 		+ '</div>';
 		
 	var renderer = tmpl(view);
