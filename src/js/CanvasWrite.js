@@ -33,7 +33,7 @@
 			this.top = opts.top;
 			this.beginLeft = opts.left;
 			this.left = opts.left;
-			this.color = opts.color || this.color;
+			this.colorString = this.color = opts.color || this.color;
 
 			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
 			
