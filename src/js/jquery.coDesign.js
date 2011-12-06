@@ -111,6 +111,7 @@
                         action = 'complete';
                         textRenderer.draw(charStr);
                     }
+
                     options.onWrite({
                         'action': action,
                         'value': charStr,

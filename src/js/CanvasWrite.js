@@ -33,7 +33,14 @@
 			this.top = opts.top;
 			this.beginLeft = opts.left;
 			this.left = opts.left;
-			this.colorString = this.color = opts.color || this.color;
+
+			this.color = opts.color || this.color;
+			
+			if(typeof this.color === 'string'){
+				this.colorString = this.color;
+			} else {
+				this.colorString = _getColor( this.color);
+			}
 
 			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
 			
