@@ -109,13 +109,16 @@
                     }
                     else {
                         action = 'complete';
-                        textRenderer.draw(charStr);
+                        textRenderer.draw({
+                            value: charStr
+                        });
                     }
 
                     options.onWrite({
                         'action': action,
                         'value': charStr,
-                        'color': textRenderer.colorString
+                        'color': textRenderer.colorString,
+                        'size': textRenderer.fontSize
                     });
                 },
                 
@@ -151,7 +154,8 @@
                         'action': 'begin',
                         'top': top,
                         'left':  left,
-                        'color': textRenderer.colorString
+                        'color': textRenderer.colorString,
+                        'size': textRenderer.fontSize
                     });
 
                     clearInterval(timer);
@@ -334,11 +338,18 @@
                         client.begin({
                             top: event.top,
                             left: event.left,
-                            color: event.color
+                            color: event.color,
+                            size: event.size
                         });
                     }
                     else
-                    if (action === 'complete'){ client.draw(event.value); }
+                    if (action === 'complete'){ 
+                        client.draw({
+                            value: event.value,
+                            color: event.color,
+                            size: event.size
+                        });
+                     }
                     else
                     if (action === 'newline'){ client.newline(); }
                     else

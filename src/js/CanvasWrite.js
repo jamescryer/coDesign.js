@@ -42,14 +42,13 @@
 				this.colorString = _getColor( this.color);
 			}
 
-			context.font = this.fontStyle+ ' '+ this.fontSize + 'px ' + this.fontFamily;
-			
 			context.textBaseline = "middle";
 			context.globalAlpha = .9;
 		},
 
-		draw: function(text){
+		draw: function(opts){
 			var context = this.canvas.getContext('2d'),
+				text = opts.value,
 				width = context.measureText(text).width,
 				imageData;
 				
@@ -65,7 +64,11 @@
 				imageData: imageData
 				});
 
-			context.fillStyle = _getColor(this.color);
+			context.font = this.fontStyle+ ' '+ ( opts.size || this.fontSize) + 'px ' + this.fontFamily;
+			context.fillStyle = opts.color || _getColor(this.color);
+
+			this.colorString = context.fillStyle;
+			
 			context.fillText(text, this.left, this.top);
 			
 			this.left += width; // move to next character position
