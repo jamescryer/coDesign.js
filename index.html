@@ -138,7 +138,7 @@
 			<div id="codesign" style="position: relative; border:1px solid #ccc; width: 400px; height: 300px;"></div>
 
 			<p>
-				<a href="fullscreen-example.html">Full screen mode</a> is also supported
+				<a href="fullscreen-example.html" target="_blank">Full screen mode</a> is also supported.  Click here to see the <a href="http://jamescryer.no.de/codesign" target="_blank">realtime example</a>
 			</p>
 			
 			<h2>Examples</h2>
@@ -170,21 +170,38 @@ $('#codesign').coDesign({
 
 		<pre>
 $('#codesign').coDesign({
-	onDraw: function( everythingYouNeed ){
-		// why dont you push everythingYouNeed to other clients, perhaps via Socket.IO
+	onDraw: function( obj ){
+		console.log(obj.action); // Current state of action.  Just started or incomplete?
+		console.log(obj.brush); // The brush to be used (this is an object)
+		console.log(obj.color); // The color to be drawn
+		console.log(obj.left); // Position of cursor from left of canvas
+		console.log(obj.top); // Position of cursor from top of canvas
 	},
-	onWrite: function( everythingYouNeed ){}
+	onWrite: function( obj ){
+	{
+		console.log(obj.action); // Was it a backspace or return ?
+		console.log(obj.value); // The character that was just inserted
+		console.log(obj.color); // The color of the last character
+		console.log(obj.size); // And the size
+		console.log(obj.left); // Position of cursor from left of canvas
+		console.log(obj.top); // Position of cursor from top of canvas
+	}
 });</pre>
 		<p>
-			And you can trigger the events like this:
+			Events can be triggered.  Where an object is specified, that object should contain all the neccessary information to perform an action. Object properties are detailed above. 
 		</p>
 <pre>
-$('#codesign').coDesign('draw', everyThingItNeeds ); // trigger draw event
-$('#codesign').coDesign('write', everyThingItNeeds ); // trigger write event</pre>
-			
+$('#codesign').coDesign('draw', obj ); // trigger draw event
+$('#codesign').coDesign('write', obj ); // trigger write event
+$('#codesign').coDesign('update', config ); // Update properties or replace callbacks
+$('#codesign').coDesign('clear'); // Clear the canvas
+$('#codesign').coDesign('destroy'); // Destroy the canvas and unbind events</pre>
+		<p>
+			The realtime example uses this <a href="https://github.com/jamescryer/nodejs-homepage/blob/master/public/js/realtimecodesign.js" target="_blacnk">client-side code</a>.   Take a look at this for a working example.
+		</p>
 		<h2>Credit due</h2>
 		<p>
-			Although I've mosty worked on this in my own time I'd like to thank the awesome <a href="https://www.huddle.com" target="_blank">Huddle.com</a> for 'Tuesday Time', the day when developers at Huddle get the chance to contribute back to the Open Source community.
+			Although I've mosty worked on this in my own time I'd like to thank the awesome <a href="http://www.huddle.com" target="_blank">Huddle.com</a> for 'Tuesday Time', the day when developers at Huddle get the chance to contribute back to the Open Source community.
 		</p>
 		
 		<footer>

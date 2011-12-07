@@ -49,9 +49,14 @@
 		draw: function(opts){
 			var context = this.canvas.getContext('2d'),
 				text = opts.value,
-				width = context.measureText(text).width,
+				width,
 				imageData;
-				
+			
+			context.font = this.fontStyle+ ' '+ ( opts.size || this.fontSize) + 'px ' + this.fontFamily;
+			context.fillStyle = opts.color || _getColor(this.color);
+			
+			width = context.measureText(text).width;
+			
 			try {
 				imageData = context.getImageData(this.left, this.top-(this.fontSize/2), width, this.fontSize)	
 			} catch(e){}
@@ -63,9 +68,6 @@
 				width: width,
 				imageData: imageData
 				});
-
-			context.font = this.fontStyle+ ' '+ ( opts.size || this.fontSize) + 'px ' + this.fontFamily;
-			context.fillStyle = opts.color || _getColor(this.color);
 
 			this.colorString = context.fillStyle;
 			

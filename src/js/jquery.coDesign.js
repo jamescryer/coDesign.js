@@ -162,7 +162,6 @@
                     canvasPainter.complete();
 
                     options.onDraw({
-                        type: 'push-paint',
                         action: 'complete'
                     });
                     
@@ -180,7 +179,6 @@
                     canvasPainter.begin();
 
                     options.onDraw({
-                        'type': 'push-paint',
                         'action': 'begin'
                     });
 
@@ -196,8 +194,8 @@
                                 'action': 'incomplete',
                                 'brush': canvasPainter.brush,
                                 'color': canvasPainter.color,
-                                'x': x,
-                                'y': y
+                                'left': x,
+                                'top': y
                             });
                         }
 
@@ -225,8 +223,8 @@
                             'action': 'incomplete',
                             'brush': canvasPainter.brush,
                             'color': canvasPainter.color,
-                            'x': x,
-                            'y': y
+                            'left': x,
+                            'top': y
                         });
                     }
                 },
@@ -237,7 +235,6 @@
                     canvasPainter.complete();
 
                     options.onDraw({
-                        type: 'push-paint',
                         action: 'complete'
                     });
                 },
@@ -258,7 +255,6 @@
                     canvas.focus();
                     canvasPainter.begin();
                     options.onDraw({
-                        'type': 'push-paint',
                         'action': 'begin'
                     });
                 },
@@ -284,8 +280,8 @@
                                 'action': 'incomplete',
                                 'brush': canvasPainter.brush,
                                 'color': canvasPainter.color,
-                                'x': x,
-                                'y': y
+                                'left': x,
+                                'top': y
                             });
                         }
 
@@ -315,8 +311,8 @@
                         client
                             .draw({
                                 color: event.color,
-                                x: event.x,
-                                y: event.y,
+                                x: event.left,
+                                y: event.top,
                                 brush: event.brush
                             });
                     }
