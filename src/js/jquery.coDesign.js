@@ -81,8 +81,6 @@
                         color: options.color
                     });
 
-                    canvas.get(0).onkeypress = _private.textareaKeyUp;
-
                     if(options.enableControls){
 						_private.enableControls();
                     }
@@ -121,7 +119,9 @@
                         'size': textRenderer.fontSize
                     });
 					
-					return false;
+					if(charCode === 8){
+						return false;	
+					}
                 },
                 
                 enableControls: function(){
@@ -402,7 +402,6 @@
                             _private.mouseUp(event);
                         }).
                         bind('mouseenter', function(event){
-                            // tabName check is a bit of hack
                             if(mousedownistrue && ( !event.fromElement || event.fromElement.tagName !== 'BUTTON')) {
                                 _private.mouseDown(event);
                             }
@@ -414,6 +413,13 @@
                     cnv.addEventListener('touchstart', _private.touchDown, false);
                     cnv.addEventListener('touchmove', _private.touchMove , false);
                     cnv.addEventListener('touchend', _private.touchUp , false);
+
+                    cnv.onkeydown = function(e){
+						if(e.which === 8){
+							return false;
+						}
+					};
+					cnv.onkeypress = _private.textareaKeyUp;
 
                     $this.
                         bind('paint.codesign', _private.paint ).

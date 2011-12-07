@@ -58,14 +58,14 @@
 			width = context.measureText(text).width;
 			
 			try {
-				imageData = context.getImageData(this.left, this.top-(this.fontSize/2), width, this.fontSize)	
+				imageData = context.getImageData(this.left-1, this.top-(this.fontSize/2)-1, width+2, this.fontSize+2)	
 			} catch(e){}
 
 			this.lastCharacters.push({
-				top: this.top,
-				left: this.left,
-				height: this.fontSize,
-				width: width,
+				top: this.top-1,
+				left: this.left-1,
+				height: this.fontSize+2,
+				width: width+1,
 				imageData: imageData
 				});
 
