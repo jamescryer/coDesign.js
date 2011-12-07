@@ -120,6 +120,8 @@
                         'color': textRenderer.colorString,
                         'size': textRenderer.fontSize
                     });
+					
+					return false;
                 },
                 
                 enableControls: function(){
