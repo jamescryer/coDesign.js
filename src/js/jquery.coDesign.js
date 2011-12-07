@@ -120,7 +120,7 @@
                     });
 					
 					if(charCode === 8){
-						return false;	
+						return false;
 					}
                 },
                 
@@ -414,12 +414,7 @@
                     cnv.addEventListener('touchmove', _private.touchMove , false);
                     cnv.addEventListener('touchend', _private.touchUp , false);
 
-                    cnv.onkeydown = function(e){
-						if(e.which === 8){
-							return false;
-						}
-					};
-					cnv.onkeypress = _private.textareaKeyUp;
+					cnv.onkeydown = _private.textareaKeyUp;
 
                     $this.
                         bind('paint.codesign', _private.paint ).
