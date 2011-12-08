@@ -90,15 +90,14 @@
                     $.data($this.get(0), 'IsCoDesign', true);
                 },
                 
-                textareaKeyUp: function( event ){
+                keypress: function( event ){
                     
                     var action,
                         charCode = event.which,
                         charStr = String.fromCharCode(charCode);
 
                     if(charCode === 8){
-                        action = 'backspace';
-                        textRenderer.backspace();
+                        return false;
                     }
                     else
                     if(charCode === 13){
@@ -118,12 +117,27 @@
                         'color': textRenderer.colorString,
                         'size': textRenderer.fontSize
                     });
-					
-					if(charCode === 8){
-						return false;
-					}
                 },
-                
+
+                backspace: function( event ){
+                    var action,
+                        charCode = event.which,
+                        charStr = String.fromCharCode(charCode);
+
+                    if(charCode === 8){
+                        action = 'backspace';
+                        textRenderer.backspace();
+                        options.onWrite({
+                            'action': action,
+                            'value': charStr,
+                            'color': textRenderer.colorString,
+                            'size': textRenderer.fontSize
+                        });
+                        event.preventDefault();
+                        return false;
+                    }
+                },
+
                 enableControls: function(){
                     
                     new $.coDesign.CanvasControl({
@@ -414,7 +428,8 @@
                     cnv.addEventListener('touchmove', _private.touchMove , false);
                     cnv.addEventListener('touchend', _private.touchUp , false);
 
-					cnv.onkeydown = _private.textareaKeyUp;
+                    cnv.addEventListener('keydown', _private.backspace, false);
+                    cnv.addEventListener('keypress', _private.keypress , false);
 
                     $this.
                         bind('paint.codesign', _private.paint ).
